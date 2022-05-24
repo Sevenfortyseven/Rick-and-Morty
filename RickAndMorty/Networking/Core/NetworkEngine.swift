@@ -25,6 +25,8 @@ extension NetworkEngine
             return .failure(.invalidURL(urlComponents.url))
         }
         
+        print("-----Request URL: \(url)------")
+        
         var request = URLRequest(url: url)
         request.httpMethod = endpoint.method.rawValue
         request.allHTTPHeaderFields = endpoint.header

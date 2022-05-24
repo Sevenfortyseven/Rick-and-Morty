@@ -9,14 +9,14 @@ import Foundation
 
 protocol EpisodeServicable
 {
-    func getAllEpisodes() async -> Result<Episode.NetworkResponse, RequestError>
+    func getAllEpisodes(page: Int) async -> Result<Episode.NetworkResponse, RequestError>
 }
 
 
 struct EpisodeService: NetworkEngine, EpisodeServicable
 {
-    func getAllEpisodes() async -> Result<Episode.NetworkResponse, RequestError> {
-        return await sendRequest(endpoint: RickAndMortyEndpoint.allEpisodes, responseModel: Episode.NetworkResponse.self)
+    func getAllEpisodes(page: Int) async -> Result<Episode.NetworkResponse, RequestError> {
+        return await sendRequest(endpoint: RickAndMortyEndpoint.allEpisodes(page: page), responseModel: Episode.NetworkResponse.self)
     }
     
     

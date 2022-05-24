@@ -9,7 +9,7 @@ import Foundation
 
 enum RickAndMortyEndpoint
 {
-    case allEpisodes
+    case allEpisodes(page: Int)
 }
 
 extension RickAndMortyEndpoint: Endpoint
@@ -38,8 +38,8 @@ extension RickAndMortyEndpoint: Endpoint
     
     var queryParams: [URLQueryItem]? {
         switch self {
-        case .allEpisodes:
-            return nil
+        case .allEpisodes(let page):
+            return [URLQueryItem(name: "page", value: String(page))]
         }
     }
     
