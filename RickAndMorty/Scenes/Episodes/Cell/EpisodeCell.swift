@@ -26,6 +26,7 @@ final class EpisodeCell: UITableViewCell
         addSubviews()
         initializeConstraints()
         updateUI()
+        
     }
     
     required init?(coder: NSCoder) {
@@ -65,20 +66,25 @@ final class EpisodeCell: UITableViewCell
     private var namelabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .preferredFont(forTextStyle: .title3, compatibleWith: .init(legibilityWeight: .bold))
         label.textColor = .white
+        label.numberOfLines = 0
+        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return label
     }()
     
     private var episodeLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .white
+        label.font = .preferredFont(forTextStyle: .body, compatibleWith: .init(legibilityWeight: .bold))
+        label.textColor = .lightGray
         return label
     }()
     
     private var airDateLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .preferredFont(forTextStyle: .footnote, compatibleWith: .init(legibilityWeight: .bold))
         label.textColor = .white
         return label
     }()
@@ -93,7 +99,7 @@ extension EpisodeCell
     
     private func initializeConstraints() {
         var constraints = [NSLayoutConstraint]()
-        
+
         constraints.append(namelabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: GlobalConstants.TableView.leadingOffset))
         constraints.append(namelabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: GlobalConstants.TableView.topOffset))
         
@@ -102,6 +108,7 @@ extension EpisodeCell
         
         constraints.append(episodeLabel.leadingAnchor.constraint(equalTo: namelabel.trailingAnchor, constant: GlobalConstants.TableView.itemPadding))
         constraints.append(episodeLabel.firstBaselineAnchor.constraint(equalTo: namelabel.firstBaselineAnchor))
+        constraints.append(episodeLabel.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: GlobalConstants.TableView.trailingOffset))
         
         NSLayoutConstraint.activate(constraints)
     }

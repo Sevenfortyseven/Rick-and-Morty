@@ -7,11 +7,19 @@
 
 import UIKit
 
+protocol EpisodesViewControllerDelegate: AnyObject
+{
+    func didSelect()
+}
+
+
 final class EpisodesViewController: UIViewController
 {
+    weak var delegate: EpisodesViewControllerDelegate?
     
     public var viewModel: EpisodesViewModel
     
+    private var searchBarModule = SearchBarModule()
     
     // MARK: -- Initialization --
     
@@ -31,6 +39,7 @@ final class EpisodesViewController: UIViewController
         initializeConstraints()
         updateUI()
         setupTableView()
+        setupSearchbar()
         bindToViewModel()
     }
     
@@ -43,6 +52,7 @@ final class EpisodesViewController: UIViewController
     private func addSubviews() {
         view.addSubview(background)
         view.addSubview(episodesTableView)
+        view.addSubview(searchBarModule)
     }
     
     
@@ -78,9 +88,22 @@ final class EpisodesViewController: UIViewController
         tableView.backgroundColor = .clear
         return tableView
     }()
+    
 }
 
 
+extension EpisodesViewController: UISearchBarDelegate
+{
+    // MARK: -- Searchbar Configuration & Delegate Methods --
+    
+    private func setupSearchbar() {
+        searchBarModule.searchBar.delegate = self
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        viewModel.search(with: searchText)
+    }
+}
 
 
 extension EpisodesViewController: UITableViewDelegate, UITableViewDataSource
@@ -109,15 +132,12 @@ extension EpisodesViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return tableView.bounds.height * GlobalConstants.tableViewCellHMulti
     }
-//
-//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        // Check if user scrolls to the botto of the scrollView to paginate
-//        let position = scrollView.contentOffset.y
-//        if position > (episodesTableView.contentSize.height - 150 - scrollView.frame.size.height) {
-//            print("Pagination needed")
-//        }
-//    }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("Selected")
+        delegate?.didSelect()
+    }
+
 }
 
 
@@ -139,6 +159,10 @@ extension EpisodesViewController
         constraints.append(episodesTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor))
         constraints.append(episodesTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor))
         constraints.append(episodesTableView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: GlobalConstants.tableViewHeightMult))
+        
+        constraints.append(searchBarModule.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor))
+        constraints.append(searchBarModule.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor))
+        constraints.append(searchBarModule.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor))
         
         NSLayoutConstraint.activate(constraints)
     }

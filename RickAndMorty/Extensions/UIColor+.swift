@@ -18,4 +18,8 @@ extension UIColor
         return self.init(named: "tableview_background_color")!
     }
     
+    static var searchBarBackgroundColor: UIColor {
+        return self.init(named: "searchbar_background_color")!
+    }
+    
 }

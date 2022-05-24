@@ -10,9 +10,9 @@ import Foundation
 final class EpisodesViewModel
 {
     
-    // MARK: -- Private
+    // MARK: -- Private States --
     private let networkService: EpisodeService
-    
+        
     /// Maximum pages available for pagination
     private var maximumPages: Int?
     
@@ -24,7 +24,24 @@ final class EpisodesViewModel
         }
     }
     
-    // MARK: -- Public
+    /// Fetched CellViewModels
+    private var fetchedVMData: [EpisodeCellViewModel]? {
+        didSet {
+            guard fetchedVMData != nil else { return }
+            episodeCellVMs = fetchedVMData!
+        }
+    }
+    
+    /// Fetched by Filtering CellViewModels that replace fetched CellViewModels
+    ///  while user is searching
+    private var filteredVMData: [EpisodeCellViewModel]? {
+        didSet {
+            guard filteredVMData != nil else { return }
+            episodeCellVMs = filteredVMData!
+        }
+    }
+    
+    // MARK: -- Public States --
     
     public var episodeCellVMs = [EpisodeCellViewModel]() {
         didSet {
@@ -34,6 +51,8 @@ final class EpisodesViewModel
     
     /// Observes data changes in the ViewModel array
     public var reloadNeeded: ObservableObject = ObservableObject(value: false)
+    
+    
     
     
     init(networkService: EpisodeService) {
@@ -65,14 +84,45 @@ final class EpisodesViewModel
             case .success(let response):
                 populateCellVMArray(paginatedData: response.results)
             case .failure(let error):
-                print(error)
+                dump(error)
             }
         }
     }
     
-    /// Paginate if more pages are available
+    /// Search Network Request
+    private func sendSearchRequest(with searchText: String) {
+        Task(priority: .background) {
+            let result = await networkService.searchEpisodes(searchText: searchText)
+            switch result {
+            case .success(let response):
+                populateCellVMArray(searchData: response.results)
+            case .failure(let error):
+                dump(error)
+            }
+        }
+    }
+    
+    /// Check text before sending a request
+    ///  Also limit search requests by canceling
+    ///   DispatchWorkItem if spammed
+    public func search(with searchText: String) {
+        guard searchText != "",
+              fetchedVMData != nil
+        else {
+            filteredVMData = nil
+            episodeCellVMs = fetchedVMData!
+            return
+        }
+        sendSearchRequest(with: searchText)
+
+    }
+    
+    /// Paginate if more pages are available and searchedData is nil
     public func paginateIfNeeded(indexPath: IndexPath) {
-        guard let maximumPages = maximumPages else { return }
+        guard let maximumPages = maximumPages,
+              filteredVMData == nil
+        else { return }
+        
         
         if indexPath.row == episodeCellVMs.count - 1 &&
             currentPage < maximumPages {
@@ -89,20 +139,26 @@ final class EpisodesViewModel
     
     /// Transform fetched Episode Model into Cell ViewModel and append to CellViewModels array
     /// If data is fetched with pagination it appends (+=)  instead of setting it (=)
-    private func populateCellVMArray(initialData: [Episode]? = nil, paginatedData: [Episode]? = nil) {
+    private func populateCellVMArray(initialData: [Episode]? = nil, paginatedData: [Episode]? = nil, searchData: [Episode]? = nil) {
         var cellVMs: [EpisodeCellViewModel]
         
         if let paginatedData = paginatedData {
             cellVMs = paginatedData.map { EpisodeCellViewModel(episodeModel: $0.self)}
-            episodeCellVMs += cellVMs
+            if fetchedVMData != nil {
+                fetchedVMData! += cellVMs
+            }
         }
         
         if let initialData = initialData {
             cellVMs = initialData.map { EpisodeCellViewModel(episodeModel: $0.self)}
-            episodeCellVMs = cellVMs
+            fetchedVMData = cellVMs
         }
         
-       
+        if let searchData = searchData {
+            cellVMs = searchData.map { EpisodeCellViewModel(episodeModel: $0.self)}
+            filteredVMData = cellVMs
+        }
+        
     }
     
 }

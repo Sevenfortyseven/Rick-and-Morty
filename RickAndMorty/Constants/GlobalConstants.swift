@@ -32,7 +32,11 @@ struct GlobalConstants
         }
         
         static var leadingOffset: CGFloat {
-            return 5
+            return 10
+        }
+        
+        static var trailingOffset: CGFloat {
+            return -10
         }
         
         static var itemPadding: CGFloat {
