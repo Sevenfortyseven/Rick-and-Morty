@@ -14,11 +14,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        let tabBarVC = UITabBarController()
-        coordinator = Coordinator(tabBarController: tabBarVC)
+        let navVC = UINavigationController()
+        coordinator = Coordinator(navigationController: navVC)
         
         let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = tabBarVC
+        window.rootViewController = navVC
         self.window = window
         window.makeKeyAndVisible()
         self.coordinator?.start()

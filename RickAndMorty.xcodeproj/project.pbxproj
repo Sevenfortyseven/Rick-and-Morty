@@ -33,6 +33,8 @@
 		9FF18175283D46880018544F /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF18174283D46880018544F /* UIColor+.swift */; };
 		9FF18178283D4F2E0018544F /* ObservableObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF18177283D4F2E0018544F /* ObservableObject.swift */; };
 		9FF1817A283D79BE0018544F /* SearchBarModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF18179283D79BE0018544F /* SearchBarModule.swift */; };
+		9FF18181283DA4110018544F /* EpisodeDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF18180283DA4110018544F /* EpisodeDetailsVC.swift */; };
+		9FF18183283DA4660018544F /* EpisodeDetailsVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF18182283DA4660018544F /* EpisodeDetailsVM.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,6 +66,8 @@
 		9FF18174283D46880018544F /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
 		9FF18177283D4F2E0018544F /* ObservableObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableObject.swift; sourceTree = "<group>"; };
 		9FF18179283D79BE0018544F /* SearchBarModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarModule.swift; sourceTree = "<group>"; };
+		9FF18180283DA4110018544F /* EpisodeDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailsVC.swift; sourceTree = "<group>"; };
+		9FF18182283DA4660018544F /* EpisodeDetailsVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailsVM.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +128,7 @@
 			children = (
 				9F76AF46283D3899005E7ED9 /* ReusableViews */,
 				9F76AF0F283CE3C9005E7ED9 /* Episodes */,
+				9FF1817B283DA3DA0018544F /* EpisodeDetails */,
 				9F76AF38283D227F005E7ED9 /* Locations */,
 				9F76AF37283D2273005E7ED9 /* Characters */,
 			);
@@ -188,6 +193,7 @@
 		9F76AF11283CE3E2005E7ED9 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				9FF18179283D79BE0018544F /* SearchBarModule.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -330,7 +336,6 @@
 		9F76AF46283D3899005E7ED9 /* ReusableViews */ = {
 			isa = PBXGroup;
 			children = (
-				9FF18179283D79BE0018544F /* SearchBarModule.swift */,
 			);
 			path = ReusableViews;
 			sourceTree = "<group>";
@@ -349,6 +354,47 @@
 				9FF18174283D46880018544F /* UIColor+.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		9FF1817B283DA3DA0018544F /* EpisodeDetails */ = {
+			isa = PBXGroup;
+			children = (
+				9FF1817C283DA3E40018544F /* Controller */,
+				9FF1817D283DA3F00018544F /* ViewModel */,
+				9FF1817F283DA3FA0018544F /* Cell */,
+				9FF1817E283DA3F70018544F /* View */,
+			);
+			path = EpisodeDetails;
+			sourceTree = "<group>";
+		};
+		9FF1817C283DA3E40018544F /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				9FF18180283DA4110018544F /* EpisodeDetailsVC.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		9FF1817D283DA3F00018544F /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				9FF18182283DA4660018544F /* EpisodeDetailsVM.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		9FF1817E283DA3F70018544F /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		9FF1817F283DA3FA0018544F /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -424,6 +470,7 @@
 				9F76AF23283D0C33005E7ED9 /* NetworkEngine.swift in Sources */,
 				9F76AF0E283CE28B005E7ED9 /* Coordinator.swift in Sources */,
 				9F76AF17283CEE1F005E7ED9 /* ImageStore.swift in Sources */,
+				9FF18183283DA4660018544F /* EpisodeDetailsVM.swift in Sources */,
 				9F76AF28283D102F005E7ED9 /* Character.swift in Sources */,
 				9F76AF1D283CFEED005E7ED9 /* Endpoint.swift in Sources */,
 				9FF18178283D4F2E0018544F /* ObservableObject.swift in Sources */,
@@ -431,6 +478,7 @@
 				9FF1817A283D79BE0018544F /* SearchBarModule.swift in Sources */,
 				9F76AF3D283D22C7005E7ED9 /* CharactersVC.swift in Sources */,
 				9F76AF2C283D103C005E7ED9 /* Location.swift in Sources */,
+				9FF18181283DA4110018544F /* EpisodeDetailsVC.swift in Sources */,
 				9F76AEF4283CE1BA005E7ED9 /* AppDelegate.swift in Sources */,
 				9F76AF2A283D1035005E7ED9 /* Episode.swift in Sources */,
 				9F76AF32283D13BE005E7ED9 /* EpisodeService.swift in Sources */,

@@ -109,8 +109,9 @@ final class EpisodesViewModel
         guard searchText != "",
               fetchedVMData != nil
         else {
-            filteredVMData = nil
             episodeCellVMs = fetchedVMData!
+            filteredVMData = nil
+            
             return
         }
         sendSearchRequest(with: searchText)

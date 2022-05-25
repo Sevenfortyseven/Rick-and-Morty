@@ -13,12 +13,24 @@ import UIKit
 
 struct GlobalConstants
 {
-    static var tableViewHeightMult: CGFloat {
-        return 0.7
+    static var scrollViewHMulti: CGFloat {
+        return 0.75
     }
     
     static var tableViewCellHMulti: CGFloat {
         return 0.15
+    }
+    
+    static var leadingOffset: CGFloat {
+        return 10
+    }
+    
+    static var itemOffset: CGFloat {
+        return 15
+    }
+    
+    static var itemOffsetN: CGFloat {
+        return -15
     }
     
     struct TableView {

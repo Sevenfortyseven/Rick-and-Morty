@@ -53,6 +53,7 @@ final class EpisodesViewController: UIViewController
         view.addSubview(background)
         view.addSubview(episodesTableView)
         view.addSubview(searchBarModule)
+        view.addSubview(episodesLabel)
     }
     
     
@@ -87,6 +88,15 @@ final class EpisodesViewController: UIViewController
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = .clear
         return tableView
+    }()
+    
+    private var episodesLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .white
+        label.font = .preferredFont(forTextStyle: .title1, compatibleWith: .init(legibilityWeight: .bold))
+        label.text = "Episodes"
+        return label
     }()
     
 }
@@ -157,12 +167,15 @@ extension EpisodesViewController
         
         constraints.append(episodesTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor))
         constraints.append(episodesTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor))
-        constraints.append(episodesTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor))
-        constraints.append(episodesTableView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: GlobalConstants.tableViewHeightMult))
+        constraints.append(episodesTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor))
+        constraints.append(episodesTableView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: GlobalConstants.scrollViewHMulti))
         
         constraints.append(searchBarModule.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor))
         constraints.append(searchBarModule.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor))
         constraints.append(searchBarModule.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor))
+        
+        constraints.append(episodesLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: GlobalConstants.leadingOffset))
+        constraints.append(episodesLabel.bottomAnchor.constraint(equalTo: episodesTableView.topAnchor, constant: GlobalConstants.itemOffsetN))
         
         NSLayoutConstraint.activate(constraints)
     }
