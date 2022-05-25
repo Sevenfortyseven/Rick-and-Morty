@@ -17,6 +17,12 @@ class EpisodeDetailsViewModel
         self.episode = episode
         self.networkService = networkService
         startNetworking()
+        
+        defer {
+            episodeName.value = episode.name
+            episodeAirDate.value = episode.airDate
+            episodeinfo.value = episode.episode
+        }
     }
     
     public var characterStore = [Character]() {
@@ -30,8 +36,10 @@ class EpisodeDetailsViewModel
         return characterStore[indexPath.row]
     }
     
-    public var reloadNeeded: ObservableObject = ObservableObject(value: false)
-    
+    public var reloadNeeded: ObservableObject<Bool> = ObservableObject(value: false)
+    public var episodeName: ObservableObject<String?> = ObservableObject(value: nil)
+    public var episodeAirDate: ObservableObject<String?> = ObservableObject(value: nil)
+    public var episodeinfo: ObservableObject<String?> = ObservableObject(value: nil)
     
     /// Episode.characters give us full url strings of characters,
     /// but we need only query ID-s so we filter them and
@@ -55,5 +63,9 @@ class EpisodeDetailsViewModel
                 print(error)
             }
         }
+    }
+    
+    public func getSelectedCharacter(with indexPath: IndexPath) -> Character {
+        return characterStore[indexPath.row]
     }
 }

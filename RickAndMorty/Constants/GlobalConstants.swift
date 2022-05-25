@@ -13,12 +13,29 @@ import UIKit
 
 struct GlobalConstants
 {
+    
+    static var imageSizeMulti: CGFloat {
+        return 0.25
+    }
+    
     static var scrollViewHMulti: CGFloat {
         return 0.75
     }
     
+    static var scrollViewHMultiSmall: CGFloat {
+        return 0.5
+    }
+    
     static var tableViewCellHMulti: CGFloat {
         return 0.15
+    }
+    
+    static var collectionCellWMulti: CGFloat {
+        return 0.48
+    }
+    
+    static var collectionCellHMulti: CGFloat {
+        return 0.3
     }
     
     static var leadingOffset: CGFloat {
@@ -58,6 +75,8 @@ struct GlobalConstants
         static var itemPaddingN: CGFloat {
             return -10
         }
+        
+  
     }
     
 }
