@@ -32,6 +32,7 @@ class EpisodeDetailsviewController: UIViewController
         addSubviews()
         initializeConstraints()
         setupCollectionView()
+        bindToVM()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -43,6 +44,14 @@ class EpisodeDetailsviewController: UIViewController
         view.addSubview(charactersLabel)
     }
     
+    private func bindToVM() {
+        viewModel.reloadNeeded.bind { [unowned self] _ in
+            DispatchQueue.main.async {
+                self.charactersCollectionView.reloadData()
+            }
+           
+        }
+    }
     
     // MARK: -- UI Configuration --
     
@@ -53,11 +62,13 @@ class EpisodeDetailsviewController: UIViewController
     
     // MARK: -- UI Elements --
     
+    
+    
     private let charactersCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.translatesAutoresizingMaskIntoConstraints = false
-        cv.backgroundColor = .red
         return cv
     }()
     
@@ -91,8 +102,15 @@ extension EpisodeDetailsviewController: UICollectionViewDelegateFlowLayout, UICo
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharactersCollectionCell.identifier, for: indexPath) as! CharactersCollectionCell
-        cell.viewmo
+        cell.data = viewModel.getCellData(with: indexPath)
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 200, height: 150)
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 5
     }
     
 }

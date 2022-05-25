@@ -134,7 +134,7 @@ extension EpisodesViewController: UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: EpisodeCell.identifier, for: indexPath) as! EpisodeCell
-        cell.data = viewModel.getCellVM(with: indexPath)
+        cell.data = viewModel.getCellData(with: indexPath)
         viewModel.paginateIfNeeded(indexPath: indexPath)
         return cell
     }

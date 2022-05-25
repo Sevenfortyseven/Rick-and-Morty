@@ -25,6 +25,11 @@ class EpisodeDetailsViewModel
         }
     }
     
+    /// Get data for cell
+    public func getCellData(with indexPath: IndexPath) -> Character {
+        return characterStore[indexPath.row]
+    }
+    
     public var reloadNeeded: ObservableObject = ObservableObject(value: false)
     
     

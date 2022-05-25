@@ -134,7 +134,7 @@ final class EpisodesViewModel
     }
     
     /// Get a single Cell VM from cellVM array
-    public func getCellVM(with indexPath: IndexPath) -> Episode {
+    public func getCellData(with indexPath: IndexPath) -> Episode {
         return episodesStore[indexPath.row]
     }
     

@@ -23,6 +23,10 @@ class CharactersCollectionCell: UICollectionViewCell
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        contentView.clipsToBounds = true
+        addSubviews()
+        initializeConstraints()
+        
     }
     
     required init?(coder: NSCoder) {
@@ -45,6 +49,7 @@ class CharactersCollectionCell: UICollectionViewCell
         }
         characterStatus.text = data.status
         characterName.text = data.name
+        characterImage.getImage(with: data.image)
     }
     
     // MARK: -- ContentView Configuration --
@@ -87,15 +92,15 @@ extension CharactersCollectionCell
         var constraints = [NSLayoutConstraint]()
         
         constraints.append(characterImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor))
-        constraints.append(characterName.trailingAnchor.constraint(equalTo: contentView.trailingAnchor))
-        constraints.append(characterName.topAnchor.constraint(equalTo: contentView.topAnchor))
-        constraints.append(characterName.bottomAnchor.constraint(equalTo: contentView.bottomAnchor))
+        constraints.append(characterImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor))
+        constraints.append(characterImage.topAnchor.constraint(equalTo: contentView.topAnchor))
+        constraints.append(characterImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor))
         
         constraints.append(characterName.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: GlobalConstants.ScrollView.leadingOffset))
         constraints.append(characterName.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: GlobalConstants.ScrollView.botOffset))
         
         constraints.append(characterStatus.leadingAnchor.constraint(equalTo: characterName.leadingAnchor))
-        constraints.append(characterStatus.bottomAnchor.constraint(equalTo: characterName.topAnchor, constant: GlobalConstants.ScrollView.itemPadding))
+        constraints.append(characterStatus.bottomAnchor.constraint(equalTo: characterName.topAnchor, constant: GlobalConstants.ScrollView.itemPaddingN))
         
         NSLayoutConstraint.activate(constraints)
     }

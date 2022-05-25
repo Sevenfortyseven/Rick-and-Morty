@@ -40,7 +40,7 @@ struct GlobalConstants
         }
         
         static var botOffset: CGFloat {
-            return 7
+            return -7
         }
         
         static var leadingOffset: CGFloat {
