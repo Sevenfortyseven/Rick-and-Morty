@@ -25,25 +25,25 @@ final class EpisodesViewModel
     }
     
     /// Fetched CellViewModels
-    private var fetchedVMData: [EpisodeCellViewModel]? {
+    private var fetchedEpisodesData: [Episode]? {
         didSet {
-            guard fetchedVMData != nil else { return }
-            episodeCellVMs = fetchedVMData!
+            guard fetchedEpisodesData != nil else { return }
+            episodesStore = fetchedEpisodesData!
         }
     }
     
     /// Fetched by Filtering CellViewModels that replace fetched CellViewModels
     ///  while user is searching
-    private var filteredVMData: [EpisodeCellViewModel]? {
+    private var filteredEpisodesData: [Episode]? {
         didSet {
-            guard filteredVMData != nil else { return }
-            episodeCellVMs = filteredVMData!
+            guard filteredEpisodesData != nil else { return }
+            episodesStore = filteredEpisodesData!
         }
     }
     
     // MARK: -- Public States --
     
-    public var episodeCellVMs = [EpisodeCellViewModel]() {
+    public var episodesStore = [Episode]() {
         didSet {
             reloadNeeded.value = !reloadNeeded.value
         }
@@ -69,7 +69,7 @@ final class EpisodesViewModel
             case .success(let response):
                 print(response.info)
                 maximumPages = response.info.pages
-                populateCellVMArray(initialData: response.results)
+                populateDataStore(initialData: response.results)
             case .failure(let error):
                 print(error)
             }
@@ -82,7 +82,7 @@ final class EpisodesViewModel
             let result = await networkService.getAllEpisodes(page: currentPage)
             switch result {
             case .success(let response):
-                populateCellVMArray(paginatedData: response.results)
+                populateDataStore(paginatedData: response.results)
             case .failure(let error):
                 dump(error)
             }
@@ -95,7 +95,7 @@ final class EpisodesViewModel
             let result = await networkService.searchEpisodes(searchText: searchText)
             switch result {
             case .success(let response):
-                populateCellVMArray(searchData: response.results)
+                populateDataStore(searchData: response.results)
             case .failure(let error):
                 dump(error)
             }
@@ -107,10 +107,10 @@ final class EpisodesViewModel
     ///   DispatchWorkItem if spammed
     public func search(with searchText: String) {
         guard searchText != "",
-              fetchedVMData != nil
+              fetchedEpisodesData != nil
         else {
-            episodeCellVMs = fetchedVMData!
-            filteredVMData = nil
+            episodesStore = fetchedEpisodesData!
+            filteredEpisodesData = nil
             
             return
         }
@@ -121,11 +121,11 @@ final class EpisodesViewModel
     /// Paginate if more pages are available and searchedData is nil
     public func paginateIfNeeded(indexPath: IndexPath) {
         guard let maximumPages = maximumPages,
-              filteredVMData == nil
+              filteredEpisodesData == nil
         else { return }
         
         
-        if indexPath.row == episodeCellVMs.count - 1 &&
+        if indexPath.row == episodesStore.count - 1 &&
             currentPage < maximumPages {
             paginate()
             currentPage += 1
@@ -134,32 +134,37 @@ final class EpisodesViewModel
     }
     
     /// Get a single Cell VM from cellVM array
-    public func getCellVM(with indexPath: IndexPath) -> EpisodeCellViewModel {
-        return episodeCellVMs[indexPath.row]
+    public func getCellVM(with indexPath: IndexPath) -> Episode {
+        return episodesStore[indexPath.row]
     }
     
     /// Transform fetched Episode Model into Cell ViewModel and append to CellViewModels array
     /// If data is fetched with pagination it appends (+=)  instead of setting it (=)
-    private func populateCellVMArray(initialData: [Episode]? = nil, paginatedData: [Episode]? = nil, searchData: [Episode]? = nil) {
-        var cellVMs: [EpisodeCellViewModel]
+    private func populateDataStore(initialData: [Episode]? = nil, paginatedData: [Episode]? = nil, searchData: [Episode]? = nil) {
+        var data: [Episode]
         
         if let paginatedData = paginatedData {
-            cellVMs = paginatedData.map { EpisodeCellViewModel(episodeModel: $0.self)}
-            if fetchedVMData != nil {
-                fetchedVMData! += cellVMs
+            data = paginatedData
+            if fetchedEpisodesData != nil {
+                fetchedEpisodesData! += data
             }
         }
         
         if let initialData = initialData {
-            cellVMs = initialData.map { EpisodeCellViewModel(episodeModel: $0.self)}
-            fetchedVMData = cellVMs
+            data = initialData
+            fetchedEpisodesData = data
         }
         
         if let searchData = searchData {
-            cellVMs = searchData.map { EpisodeCellViewModel(episodeModel: $0.self)}
-            filteredVMData = cellVMs
+            data = searchData
+            filteredEpisodesData = data
         }
         
+    }
+    
+    /// Get selected episode from an array
+    public func getSelectedEpisode(with indexPath: IndexPath) -> Episode {
+        return episodesStore[indexPath.row]
     }
     
 }

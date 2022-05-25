@@ -9,7 +9,7 @@ import UIKit
 
 protocol EpisodesViewControllerDelegate: AnyObject
 {
-    func didSelect()
+    func didSelect(episode: Episode)
 }
 
 
@@ -129,12 +129,12 @@ extension EpisodesViewController: UITableViewDelegate, UITableViewDataSource
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.episodeCellVMs.count
+        return viewModel.episodesStore.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: EpisodeCell.identifier, for: indexPath) as! EpisodeCell
-        cell.cellViewModel = viewModel.getCellVM(with: indexPath)
+        cell.data = viewModel.getCellVM(with: indexPath)
         viewModel.paginateIfNeeded(indexPath: indexPath)
         return cell
     }
@@ -144,8 +144,7 @@ extension EpisodesViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Selected")
-        delegate?.didSelect()
+        delegate?.didSelect(episode: viewModel.getSelectedEpisode(with: indexPath))
     }
 
 }

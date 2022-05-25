@@ -33,7 +33,7 @@ struct GlobalConstants
         return -15
     }
     
-    struct TableView {
+    struct ScrollView {
        
         static var topOffset: CGFloat {
             return 10
@@ -53,6 +53,10 @@ struct GlobalConstants
         
         static var itemPadding: CGFloat {
             return 10
+        }
+        
+        static var itemPaddingN: CGFloat {
+            return -10
         }
     }
     

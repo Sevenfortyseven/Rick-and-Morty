@@ -11,6 +11,7 @@ enum RickAndMortyEndpoint
 {
     case allEpisodes(page: Int)
     case searchEpisodes(searchText: String)
+    case getSelectedCharacters(IDs: String)
 }
 
 extension RickAndMortyEndpoint: Endpoint
@@ -32,7 +33,11 @@ extension RickAndMortyEndpoint: Endpoint
     
     var path: String {
         switch self {
-        default:
+        case .getSelectedCharacters:
+            return "/api/character"
+        case .allEpisodes:
+            return "/api/episode"
+        case .searchEpisodes:
             return "/api/episode"
         }
     }
@@ -43,6 +48,8 @@ extension RickAndMortyEndpoint: Endpoint
             return [URLQueryItem(name: "page", value: String(page))]
         case .searchEpisodes(let searchText):
             return [URLQueryItem(name: "name", value: searchText)]
+        case .getSelectedCharacters(let IDs):
+            return [URLQueryItem(name: "ids", value: IDs)]
         }
     }
     

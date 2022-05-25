@@ -13,7 +13,7 @@ final class EpisodeCell: UITableViewCell
 {
     private(set) static var identifier = String(describing: EpisodeCell.self)
     
-    public var cellViewModel: EpisodeCellViewModel? {
+    public var data: Episode? {
         didSet {
             updateContentView()
         }
@@ -46,8 +46,8 @@ final class EpisodeCell: UITableViewCell
     /// Updates contetnview  accordingly after receiving data from viewmodel
     private func updateContentView() {
         DispatchQueue.main.async {
-            guard let dataSource = self.cellViewModel else { return }
-            self.namelabel.text = dataSource.episodeName
+            guard let dataSource = self.data else { return }
+            self.namelabel.text = dataSource.name
             self.airDateLabel.text = dataSource.airDate
             self.episodeLabel.text = dataSource.episode
         }
@@ -100,15 +100,15 @@ extension EpisodeCell
     private func initializeConstraints() {
         var constraints = [NSLayoutConstraint]()
 
-        constraints.append(namelabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: GlobalConstants.TableView.leadingOffset))
-        constraints.append(namelabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: GlobalConstants.TableView.topOffset))
+        constraints.append(namelabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: GlobalConstants.ScrollView.leadingOffset))
+        constraints.append(namelabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: GlobalConstants.ScrollView.topOffset))
         
         constraints.append(airDateLabel.leadingAnchor.constraint(equalTo: namelabel.leadingAnchor))
-        constraints.append(airDateLabel.topAnchor.constraint(equalTo: namelabel.bottomAnchor, constant: GlobalConstants.TableView.itemPadding))
+        constraints.append(airDateLabel.topAnchor.constraint(equalTo: namelabel.bottomAnchor, constant: GlobalConstants.ScrollView.itemPadding))
         
-        constraints.append(episodeLabel.leadingAnchor.constraint(equalTo: namelabel.trailingAnchor, constant: GlobalConstants.TableView.itemPadding))
+        constraints.append(episodeLabel.leadingAnchor.constraint(equalTo: namelabel.trailingAnchor, constant: GlobalConstants.ScrollView.itemPadding))
         constraints.append(episodeLabel.firstBaselineAnchor.constraint(equalTo: namelabel.firstBaselineAnchor))
-        constraints.append(episodeLabel.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: GlobalConstants.TableView.trailingOffset))
+        constraints.append(episodeLabel.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: GlobalConstants.ScrollView.trailingOffset))
         
         NSLayoutConstraint.activate(constraints)
     }
