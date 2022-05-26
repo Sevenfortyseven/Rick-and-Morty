@@ -16,7 +16,14 @@ class EpisodeDetailsViewModel
     init(episode: Episode, networkService: CharacterService) {
         self.episode = episode
         self.networkService = networkService
-        startNetworking()
+        if NetworkMonitor.shared.isConnected {
+            print("ON")
+            internetConnection.value = true
+            startNetworking()
+        } else {
+            internetConnection.value = false
+        }
+        
         
         defer {
             episodeName.value = episode.name
@@ -31,11 +38,7 @@ class EpisodeDetailsViewModel
         }
     }
     
-    /// Get data for cell
-    public func getCellData(with indexPath: IndexPath) -> Character {
-        return characterStore[indexPath.row]
-    }
-    
+    public var internetConnection: ObservableObject<Bool?> = ObservableObject(value: nil)
     public var reloadNeeded: ObservableObject<Bool> = ObservableObject(value: false)
     public var episodeName: ObservableObject<String?> = ObservableObject(value: nil)
     public var episodeAirDate: ObservableObject<String?> = ObservableObject(value: nil)
@@ -67,5 +70,11 @@ class EpisodeDetailsViewModel
     
     public func getSelectedCharacter(with indexPath: IndexPath) -> Character {
         return characterStore[indexPath.row]
+    }
+    
+    /// Directs user on Imovies.ge to watch chosen episode
+    public func watchEpisode() -> URL {
+        return imoviesEndpoint.transferToSite.createEndpoint(with: episode.episode)!
+      
     }
 }

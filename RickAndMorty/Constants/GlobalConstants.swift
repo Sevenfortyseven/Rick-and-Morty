@@ -15,11 +15,11 @@ struct GlobalConstants
 {
     
     static var imageSizeMulti: CGFloat {
-        return 0.25
+        return 0.75
     }
     
     static var scrollViewHMulti: CGFloat {
-        return 0.75
+        return 0.70
     }
     
     static var scrollViewHMultiSmall: CGFloat {
@@ -27,7 +27,7 @@ struct GlobalConstants
     }
     
     static var tableViewCellHMulti: CGFloat {
-        return 0.15
+        return 0.18
     }
     
     static var collectionCellWMulti: CGFloat {
@@ -42,6 +42,18 @@ struct GlobalConstants
         return 10
     }
     
+    static var trailingOffset: CGFloat {
+        return -10
+    }
+    
+    static var topOffset: CGFloat {
+        return 15
+    }
+    
+    static var botOffset: CGFloat {
+        return -15
+    }
+    
     static var itemOffset: CGFloat {
         return 15
     }
@@ -50,10 +62,22 @@ struct GlobalConstants
         return -15
     }
     
+    static var CollectionTrailing: CGFloat {
+        return -5
+    }
+    
+    static var collectionLeading: CGFloat {
+        return 5
+    }
+    
+    static var minimumOffset: CGFloat {
+        return 5
+    }
+    
     struct ScrollView {
        
         static var topOffset: CGFloat {
-            return 10
+            return 12
         }
         
         static var botOffset: CGFloat {

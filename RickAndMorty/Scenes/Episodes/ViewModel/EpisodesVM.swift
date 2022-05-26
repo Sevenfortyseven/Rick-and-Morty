@@ -50,15 +50,20 @@ final class EpisodesViewModel
     }
     
     /// Observes data changes in the ViewModel array
-    public var reloadNeeded: ObservableObject = ObservableObject(value: false)
-    
+    public var reloadNeeded: ObservableObject<Bool> = ObservableObject(value: false)
+    public var internetConnection: ObservableObject<Bool?> = ObservableObject(value: nil)
     
     
     
     init(networkService: EpisodeService) {
         self.networkService = networkService
-        startNetworking()
-        
+        /// Check internet connection before making a network call
+        if NetworkMonitor.shared.isConnected {
+            internetConnection.value = true
+            startNetworking()
+        } else {
+            internetConnection.value = false
+        }
     }
     
     /// Initial Network Request
@@ -90,7 +95,9 @@ final class EpisodesViewModel
     }
     
     /// Search Network Request
+    /// check internet connection before requesting
     private func sendSearchRequest(with searchText: String) {
+        guard NetworkMonitor.shared.isConnected else { return }
         Task(priority: .background) {
             let result = await networkService.searchEpisodes(searchText: searchText)
             switch result {
@@ -102,26 +109,28 @@ final class EpisodesViewModel
         }
     }
     
-    /// Check text before sending a request
-    ///  Also limit search requests by canceling
-    ///   DispatchWorkItem if spammed
+    /// Check searchText before sending a request
+    /// if  searchText is empty, append  dataSource data with
+    /// fetched items and make search dataSource nil
     public func search(with searchText: String) {
-        guard searchText != "",
-              fetchedEpisodesData != nil
-        else {
-            episodesStore = fetchedEpisodesData!
+        guard searchText != "", fetchedEpisodesData != nil else {
+            if fetchedEpisodesData != nil {
+                episodesStore = fetchedEpisodesData!
+            }
             filteredEpisodesData = nil
-            
             return
         }
+        
         sendSearchRequest(with: searchText)
-
+        
     }
     
     /// Paginate if more pages are available and searchedData is nil
+    ///  Check for internet connection before paginating
     public func paginateIfNeeded(indexPath: IndexPath) {
         guard let maximumPages = maximumPages,
-              filteredEpisodesData == nil
+              filteredEpisodesData == nil,
+              NetworkMonitor.shared.isConnected
         else { return }
         
         
@@ -131,11 +140,6 @@ final class EpisodesViewModel
             currentPage += 1
             
         }
-    }
-    
-    /// Get a single Cell VM from cellVM array
-    public func getCellData(with indexPath: IndexPath) -> Episode {
-        return episodesStore[indexPath.row]
     }
     
     /// Transform fetched Episode Model into Cell ViewModel and append to CellViewModels array

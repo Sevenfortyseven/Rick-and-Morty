@@ -16,13 +16,36 @@ class CharacterDetailsViewModel
     init(character: Character, networkService: EpisodeService) {
         self.character = character
         self.networkService = networkService
-        startNetworking()
+        /// Check Internet connection before making a call
+        if NetworkMonitor.shared.isConnected {
+            internetConnection.value = true
+            startNetworking()
+        } else {
+            internetConnection.value = false
+        }
+        
+        
+        defer {
+            characterImage.value = character.image
+            characterName.value = character.name
+            characterSpeciesInfo.value = character.species
+            characterStatus.value = character.status
+            characterGender.value = character.gender
+            characterOrigin.value = character.origin?.name
+            characterDimension.value = character.origin?.dimension ?? "unknown"
+        }
     }
     
     // MARK: - Observable Objects -
-    
+    public var internetConnection: ObservableObject<Bool?> = ObservableObject(value: nil)
     public var reloadNeeded: ObservableObject<Bool> = ObservableObject(value: false)
-    
+    public var characterName: ObservableObject<String?> = ObservableObject(value: nil)
+    public var characterStatus: ObservableObject<String?> = ObservableObject(value: nil)
+    public var characterSpeciesInfo: ObservableObject<String?> = ObservableObject(value: nil)
+    public var characterGender: ObservableObject<String?> = ObservableObject(value: nil)
+    public var characterImage: ObservableObject<String?> = ObservableObject(value: nil)
+    public var characterOrigin: ObservableObject<String?> = ObservableObject(value: nil)
+    public var characterDimension: ObservableObject<String?> = ObservableObject(value: nil)
     
     public var episodesStore = [Episode]() {
         didSet {

@@ -22,4 +22,8 @@ extension UIColor
         return self.init(named: "searchbar_background_color")!
     }
     
+    static var backgroundColor: UIColor {
+        return self.init(named: "background_color1")!
+    }
+    
 }

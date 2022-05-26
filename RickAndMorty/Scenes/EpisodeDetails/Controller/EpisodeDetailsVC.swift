@@ -38,27 +38,27 @@ class EpisodeDetailsviewController: UIViewController
         initializeConstraints()
         setupCollectionView()
         bindToVM()
+        addTargets()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-    }
     
     private func addSubviews() {
         view.addSubview(background)
         view.addSubview(charactersCollectionView)
         view.addSubview(charactersLabel)
         view.addSubview(episodeInfoModule)
+        view.addSubview(watchButton)
     }
     
     private func bindToVM() {
         viewModel.reloadNeeded.bind { [unowned self] _ in
             DispatchQueue.main.async {
                 self.charactersCollectionView.reloadData()
+            }
+        }
+        viewModel.internetConnection.bind { [unowned self] connection in
+            if connection == false {
+                AlertManager.initializeAlert(show: .networkError, on: self)
             }
         }
         viewModel.episodeinfo.bind { [unowned self] info in
@@ -73,10 +73,8 @@ class EpisodeDetailsviewController: UIViewController
     }
     
     // MARK: -- UI Configuration --
+
     
-    private func updateUI() {
-        
-    }
     
     
     // MARK: -- UI Elements --
@@ -84,7 +82,7 @@ class EpisodeDetailsviewController: UIViewController
     private var background: UIImageView = {
         let background = UIImageView()
         background.translatesAutoresizingMaskIntoConstraints = false
-        background.contentMode = .scaleAspectFill
+        background.contentMode = .scaleToFill
         background.image = UIImage(named: ImageStore.mainBackground.rawValue)
         return background
     }()
@@ -107,6 +105,26 @@ class EpisodeDetailsviewController: UIViewController
         return label
     }()
     
+    private var watchButton: UIButton = {
+        let config = UIButton.Configuration.filled()
+        let btn = UIButton(configuration: config)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.setTitle("Watch", for: .normal)
+        btn.tintColor = .purple
+        return btn
+    }()
+    
+    @objc
+    private func watchButtonPressed() {
+        UIApplication.shared.openURL(viewModel.watchEpisode())
+    }
+    
+    // MARK: -- Targets and Actions --
+    
+    private func addTargets() {
+        watchButton.addTarget(self, action: #selector(watchButtonPressed), for: .touchUpInside)
+    }
+    
 }
 
 
@@ -128,7 +146,7 @@ extension EpisodeDetailsviewController: UICollectionViewDelegateFlowLayout, UICo
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharactersCollectionCell.identifier, for: indexPath) as! CharactersCollectionCell
-        cell.data = viewModel.getCellData(with: indexPath)
+        cell.data = viewModel.getSelectedCharacter(with: indexPath)
         return cell
     }
     
@@ -154,9 +172,9 @@ extension EpisodeDetailsviewController
         constraints.append(background.topAnchor.constraint(equalTo: view.topAnchor))
         constraints.append(background.bottomAnchor.constraint(equalTo: view.bottomAnchor))
         
-        constraints.append(charactersCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor))
-        constraints.append(charactersCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor))
-        constraints.append(charactersCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor))
+        constraints.append(charactersCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,constant: GlobalConstants.collectionLeading))
+        constraints.append(charactersCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: GlobalConstants.CollectionTrailing))
+        constraints.append(charactersCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor))
         constraints.append(charactersCollectionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: GlobalConstants.scrollViewHMulti))
         
         constraints.append(charactersLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: GlobalConstants.leadingOffset))
@@ -165,6 +183,9 @@ extension EpisodeDetailsviewController
         constraints.append(episodeInfoModule.centerXAnchor.constraint(equalTo: view.centerXAnchor))
         constraints.append(episodeInfoModule.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor))
         constraints.append(episodeInfoModule.widthAnchor.constraint(lessThanOrEqualTo: view.widthAnchor, multiplier: 0.8))
+        
+        constraints.append(watchButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: GlobalConstants.trailingOffset))
+        constraints.append(watchButton.centerYAnchor.constraint(equalTo: charactersLabel.centerYAnchor))
         
         NSLayoutConstraint.activate(constraints)
     }

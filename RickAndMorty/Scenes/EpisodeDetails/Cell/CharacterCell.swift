@@ -26,7 +26,7 @@ class CharactersCollectionCell: UICollectionViewCell
         contentView.clipsToBounds = true
         addSubviews()
         initializeConstraints()
-        
+        self.roundCorners(corners: .allCorners, radius: .small)
     }
     
     required init?(coder: NSCoder) {
@@ -35,6 +35,7 @@ class CharactersCollectionCell: UICollectionViewCell
     
     override func layoutSubviews() {
         super.layoutSubviews()
+//        characterImage.roundCorners(corners: .allCorners, radius: .small)
     }
     
     private func addSubviews() {

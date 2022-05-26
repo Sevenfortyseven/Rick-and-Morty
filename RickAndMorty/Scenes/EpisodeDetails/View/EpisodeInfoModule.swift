@@ -50,6 +50,7 @@ class EpisodeInfoModule: UIView
         let label = UILabel()
         label.font = .preferredFont(forTextStyle: .title2, compatibleWith: .init(legibilityWeight: .bold))
         label.textColor = .white
+        label.textAlignment = .center
         label.numberOfLines = 0
         return label
     }()

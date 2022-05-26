@@ -26,7 +26,6 @@ final class EpisodeCell: UITableViewCell
         addSubviews()
         initializeConstraints()
         updateUI()
-        
     }
     
     required init?(coder: NSCoder) {

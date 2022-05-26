@@ -37,10 +37,11 @@ final class EpisodesViewController: UIViewController
         super.viewDidLoad()
         addSubviews()
         initializeConstraints()
-        updateUI()
         setupTableView()
+        updateUI()
         setupSearchbar()
         bindToViewModel()
+        keyboardConfiguration()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -64,7 +65,11 @@ final class EpisodesViewController: UIViewController
             DispatchQueue.main.async {
                 self.episodesTableView.reloadData()
             }
-          
+        }
+        viewModel.internetConnection.bind { [unowned self] connection in
+            if connection == false {
+                AlertManager.initializeAlert(show: .networkError, on: self)
+            }
         }
     }
     
@@ -74,13 +79,23 @@ final class EpisodesViewController: UIViewController
         view.backgroundColor = .white
     }
     
+    /// Dismiss keyboard  with taps on the screen
+    private func keyboardConfiguration() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
+    }
     
     // MARK: -- UI Elements --
     
     private var background: UIImageView = {
         let background = UIImageView()
         background.translatesAutoresizingMaskIntoConstraints = false
-        background.contentMode = .scaleAspectFill
+        background.contentMode = .scaleToFill
         background.image = UIImage(named: ImageStore.mainBackground.rawValue)
         return background
     }()
@@ -89,6 +104,7 @@ final class EpisodesViewController: UIViewController
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = .clear
+        tableView.separatorColor = .black
         return tableView
     }()
     
@@ -136,7 +152,7 @@ extension EpisodesViewController: UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: EpisodeCell.identifier, for: indexPath) as! EpisodeCell
-        cell.data = viewModel.getCellData(with: indexPath)
+        cell.data = viewModel.getSelectedEpisode(with: indexPath)
         viewModel.paginateIfNeeded(indexPath: indexPath)
         return cell
     }
@@ -168,7 +184,7 @@ extension EpisodesViewController
         
         constraints.append(episodesTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor))
         constraints.append(episodesTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor))
-        constraints.append(episodesTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor))
+        constraints.append(episodesTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor))
         constraints.append(episodesTableView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: GlobalConstants.scrollViewHMulti))
         
         constraints.append(searchBarModule.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor))

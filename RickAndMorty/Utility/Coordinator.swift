@@ -48,11 +48,28 @@ extension Coordinator: EpisodeDetailsViewControllerDelegate
     func didSelect(character: Character) {
         let targetVM = CharacterDetailsViewModel(character: character, networkService: EpisodeService())
         let targetVC = CharacterDetailsViewController(viewModel: targetVM)
-        
+        targetVC.delegate = self
         DispatchQueue.main.async {
             self.navigationController.pushViewController(targetVC, animated: true)
         }
     }
     
     
+}
+
+extension Coordinator: CharacterDetailsViewControllerDelegate
+{
+    func episodeSelected(episode: Episode) {
+        let targetVM = EpisodeDetailsViewModel(episode: episode, networkService: CharacterService())
+        let targetVC = EpisodeDetailsviewController(viewModel: targetVM)
+        targetVC.delegate = self
+        let currentRootVC = navigationController.viewControllers[0]
+        DispatchQueue.main.async {
+            self.navigationController.setViewControllers([currentRootVC, targetVC], animated: true)
+        }
+        
+    }
+    
+ 
+        
 }

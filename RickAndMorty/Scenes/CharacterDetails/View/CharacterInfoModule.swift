@@ -22,84 +22,186 @@ class CharacterInfoModule: UIView
    
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        characterImageView.roundCorners(corners: .allCorners, radius: .small)
+    }
+    
     private func initialize() {
+//        self.backgroundColor = .backgroundColor
         self.translatesAutoresizingMaskIntoConstraints = false
+        self.clipsToBounds = true
         addSubviews()
         initializeConstraints()
     }
     
     private func addSubviews() {
-        self.addSubview(characterNameLabel)
+        self.addSubview(characterName)
         self.addSubview(characterImageView)
-        self.addSubview(Vstack)
-        Vstack.addArrangedSubview(characterStatusLabel)
-        Vstack.addArrangedSubview(characterSpeciesLabel)
-        Vstack.addArrangedSubview(characterGenderLabel)
-        Vstack.addArrangedSubview(characterOriginLabel)
+        self.addSubview(mainStack)
+        mainStack.addArrangedSubview(VstackL)
+        mainStack.addArrangedSubview(VstackR)
+        
+        VstackL.addArrangedSubview(characterStatusLabel)
+        VstackL.addArrangedSubview(characterSpeciesLabel)
+        VstackL.addArrangedSubview(characterGenderLabel)
+        VstackL.addArrangedSubview(characterDimensionLabel)
+        VstackL.addArrangedSubview(characterOriginLabel)
+        
+        VstackR.addArrangedSubview(characterStatus)
+        VstackR.addArrangedSubview(characterSpecies)
+        VstackR.addArrangedSubview(characterGender)
+        VstackR.addArrangedSubview(characterDimension)
+        VstackR.addArrangedSubview(characterOrigin)
+   
     }
     
     
     // MARK: -- UI Elements --
     
     
-    public var characterNameLabel: UILabel = {
+    public var characterName: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .preferredFont(forTextStyle: .title2, compatibleWith: .init(legibilityWeight: .bold))
         label.textColor = .white
         return label
     }()
     
-    private var characterImageView: UIImageView = {
+    public var characterImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleToFill
         return imageView
     }()
     
-    private var Vstack: UIStackView = {
+    private var mainStack: UIStackView = {
         let stack = UIStackView()
         stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .horizontal
+        stack.distribution = .fillEqually
+        stack.alignment = .leading
+        stack.spacing = 5
+        return stack
+    }()
+    
+    private var VstackL: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
         stack.distribution = .fill
-        stack.alignment = .fill
+        stack.alignment = .leading
+        stack.spacing = 5
         return stack
     }()
    
-    public var characterStatusLabel: UILabel = {
+    private var VstackR: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.distribution = .fill
+        stack.alignment = .leading
+        stack.spacing = 5
+        return stack
+    }()
+    
+    public var characterStatus: UILabel = {
         let label = UILabel()
-        label.textColor = .white
+        label.textColor = .lightGray
+        label.font = .preferredFont(forTextStyle: .callout, compatibleWith: .init(legibilityWeight: .bold))
+        label.numberOfLines = 0
         return label
     }()
     
-    public var characterSpeciesLabel: UILabel = {
+    private var characterStatusLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
+        label.font = .preferredFont(forTextStyle: .callout, compatibleWith: .init(legibilityWeight: .bold))
+        label.numberOfLines = 0
+        label.text = "Status:"
         return label
     }()
     
-    public var characterGenderLabel: UILabel = {
+    public var characterSpecies: UILabel = {
         let label = UILabel()
-        label.textColor = .white
+        label.textColor = .lightGray
+        label.font = .preferredFont(forTextStyle: .callout, compatibleWith: .init(legibilityWeight: .bold))
+        label.numberOfLines = 0
         return label
     }()
     
-    public var characterOriginLabel: UILabel = {
+    private var characterSpeciesLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
+        label.font = .preferredFont(forTextStyle: .callout, compatibleWith: .init(legibilityWeight: .bold))
+        label.numberOfLines = 0
+        label.text = "Species:"
+        return label
+    }()
+    
+    public var characterGender: UILabel = {
+        let label = UILabel()
+        label.textColor = .lightGray
+        label.font = .preferredFont(forTextStyle: .callout, compatibleWith: .init(legibilityWeight: .bold))
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    private var characterGenderLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = .preferredFont(forTextStyle: .callout, compatibleWith: .init(legibilityWeight: .bold))
+        label.numberOfLines = 0
+        label.text = "Gender:"
+        return label
+    }()
+    
+    public var characterOrigin: UILabel = {
+        let label = UILabel()
+        label.textColor = .lightGray
+        label.font = .preferredFont(forTextStyle: .callout, compatibleWith: .init(legibilityWeight: .bold))
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    private var characterOriginLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = .preferredFont(forTextStyle: .callout, compatibleWith: .init(legibilityWeight: .bold))
+        label.numberOfLines = 0
+        label.text = "Origin:"
+        return label
+    }()
+    
+    public var characterDimension: UILabel = {
+        let label = UILabel()
+        label.textColor = .lightGray
+        label.font = .preferredFont(forTextStyle: .callout, compatibleWith: .init(legibilityWeight: .bold))
+        label.numberOfLines = 0
         return label
     }()
  
+    private var characterDimensionLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = .preferredFont(forTextStyle: .callout, compatibleWith: .init(legibilityWeight: .bold))
+        label.numberOfLines = 0
+        label.text = "Dimension:"
+        return label
+    }()
+    
     private func initializeConstraints () {
         var constraints = [NSLayoutConstraint]()
         
-        constraints.append(characterNameLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: GlobalConstants.leadingOffset))
-        constraints.append(characterNameLabel.topAnchor.constraint(equalTo: self.topAnchor))
+        constraints.append(characterName.leadingAnchor.constraint(equalTo: characterImageView.leadingAnchor, constant: GlobalConstants.leadingOffset))
+        constraints.append(characterName.topAnchor.constraint(equalTo: self.topAnchor))
         
-        constraints.append(characterImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor))
-        constraints.append(characterImageView.topAnchor.constraint(equalTo: characterNameLabel.bottomAnchor, constant: GlobalConstants.itemOffsetN))
-//        constraints.append(characterImageView.heightAnchor.constraint(equalTo: UIScreen.main.heighta, multiplier: GlobalConstants.imageSizeMulti))
-        
-        constraints.append(Vstack.centerYAnchor.constraint(equalTo: characterImageView.centerYAnchor))
-        constraints.append(Vstack.leadingAnchor.constraint(equalTo: characterImageView.trailingAnchor, constant: GlobalConstants.leadingOffset))
+        constraints.append(characterImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: GlobalConstants.leadingOffset))
+        constraints.append(characterImageView.topAnchor.constraint(equalTo: characterName.bottomAnchor, constant: GlobalConstants.itemOffset))
+        constraints.append(characterImageView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: GlobalConstants.imageSizeMulti))
+        constraints.append(characterImageView.widthAnchor.constraint(equalTo: characterImageView.heightAnchor))
+
+        constraints.append(mainStack.leadingAnchor.constraint(equalTo: characterImageView.trailingAnchor, constant: GlobalConstants.itemOffset))
+        constraints.append(mainStack.centerYAnchor.constraint(equalTo: characterImageView.centerYAnchor))
+        constraints.append(mainStack.trailingAnchor.constraint(lessThanOrEqualTo: self.trailingAnchor))
         
         NSLayoutConstraint.activate(constraints)
     }
