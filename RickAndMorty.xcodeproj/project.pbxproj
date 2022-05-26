@@ -129,7 +129,7 @@
 				9F76AF09283CE256005E7ED9 /* Presentation */,
 				9F76AF08283CE251005E7ED9 /* Scenes */,
 				9F76AF07283CE249005E7ED9 /* Root */,
-				9F76AF0C283CE26F005E7ED9 /* Config */,
+				9F76AF0C283CE26F005E7ED9 /* Resources */,
 				9F76AF01283CE1BC005E7ED9 /* Info.plist */,
 			);
 			path = RickAndMorty;
@@ -184,12 +184,12 @@
 			path = Networking;
 			sourceTree = "<group>";
 		};
-		9F76AF0C283CE26F005E7ED9 /* Config */ = {
+		9F76AF0C283CE26F005E7ED9 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 				9F76AEFC283CE1BC005E7ED9 /* Assets.xcassets */,
 			);
-			path = Config;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		9F76AF0F283CE3C9005E7ED9 /* Episodes */ = {
