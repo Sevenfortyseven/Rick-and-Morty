@@ -5,7 +5,6 @@
 //  Created by aleksandre on 24.05.22.
 //
 
-import Foundation
 import UIKit
 
 protocol CharacterDetailsViewControllerDelegate: AnyObject
@@ -20,7 +19,7 @@ final class CharacterDetailsViewController: UIViewController
     
     public var viewModel: CharacterDetailsViewModel
     
-    private var characterInfoModule = CharacterInfoModule()
+    private lazy var characterInfoModule = CharacterInfoModule()
     
     // MARK: -- Initialization --
     
@@ -90,9 +89,6 @@ final class CharacterDetailsViewController: UIViewController
         }
     }
     
-    // MARK: -- UI Configuration --
-    
-    
     
     // MARK: -- UI Elements --
     
@@ -136,7 +132,6 @@ extension CharacterDetailsViewController: UITableViewDelegate, UITableViewDataSo
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(viewModel.episodesStore.count)
         return viewModel.episodesStore.count
     }
     

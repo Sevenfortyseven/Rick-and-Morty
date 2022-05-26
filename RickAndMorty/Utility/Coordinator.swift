@@ -5,7 +5,6 @@
 //  Created by aleksandre on 24.05.22.
 //
 
-import Foundation
 import UIKit
 
 final class Coordinator
@@ -33,7 +32,6 @@ extension Coordinator: EpisodesViewControllerDelegate
         let targetVM = EpisodeDetailsViewModel(episode: episode, networkService: CharacterService())
         let targetVC = EpisodeDetailsviewController(viewModel: targetVM)
         targetVC.delegate = self
-        
         DispatchQueue.main.async {
             self.navigationController.pushViewController(targetVC, animated: true)
         }

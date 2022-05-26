@@ -17,7 +17,6 @@ class EpisodeDetailsViewModel
         self.episode = episode
         self.networkService = networkService
         if NetworkMonitor.shared.isConnected {
-            print("ON")
             internetConnection.value = true
             startNetworking()
         } else {
@@ -32,11 +31,14 @@ class EpisodeDetailsViewModel
         }
     }
     
-    public var characterStore = [Character]() {
+    /// DataSource for CollectionView
+    public var characterStore: [Character] = [] {
         didSet {
             reloadNeeded.value = !reloadNeeded.value
         }
     }
+    
+    // MARK: -- Observable Objects --
     
     public var internetConnection: ObservableObject<Bool?> = ObservableObject(value: nil)
     public var reloadNeeded: ObservableObject<Bool> = ObservableObject(value: false)
@@ -56,6 +58,7 @@ class EpisodeDetailsViewModel
         return queryString
     }
     
+    /// Initial Network Request
     private func startNetworking() {
         Task(priority: .background) {
             let result = await networkService.getSelectedCharacters(selectedIDs: prepareDataForNetworkCall(urlCollection: episode.characters))
@@ -63,18 +66,19 @@ class EpisodeDetailsViewModel
             case .success(let response):
                 characterStore = response.results
             case .failure(let error):
-                print(error)
+                dump(error)
             }
         }
     }
     
+    /// Return a single character object from character strore
     public func getSelectedCharacter(with indexPath: IndexPath) -> Character {
         return characterStore[indexPath.row]
     }
     
     /// Directs user on Imovies.ge to watch chosen episode
-    public func watchEpisode() -> URL {
-        return imoviesEndpoint.transferToSite.createEndpoint(with: episode.episode)!
+    public func watchEpisode() -> URL? {
+        return imoviesEndpoint.transferToSite.createEndpoint(with: episode.episode)
       
     }
 }

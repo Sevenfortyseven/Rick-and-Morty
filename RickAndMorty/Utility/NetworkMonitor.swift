@@ -35,7 +35,7 @@ final class NetworkMonitor
             guard let strongSelf = self else { return }
             strongSelf.isConnected = path.status == .satisfied
             strongSelf.getConnectionType(path)
-            print(strongSelf.isConnected)
+            print("Internet connection: \(strongSelf.isConnected)")
         }
     }
     

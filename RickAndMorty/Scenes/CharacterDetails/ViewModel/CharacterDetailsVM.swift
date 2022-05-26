@@ -47,27 +47,30 @@ class CharacterDetailsViewModel
     public var characterOrigin: ObservableObject<String?> = ObservableObject(value: nil)
     public var characterDimension: ObservableObject<String?> = ObservableObject(value: nil)
     
-    public var episodesStore = [Episode]() {
+    
+    /// DataSource for TableView
+    public var episodesStore: [Episode] = [] {
         didSet {
             reloadNeeded.value = !reloadNeeded.value
         }
     }
     
-    
+    /// Get a single episode object from episode store
     public func getEpisode(with indexPath: IndexPath) -> Episode {
         return episodesStore[indexPath.row]
     }
     
+    /// obtain query parameters from url for further network call use
     private func prepareDataForNetworkCall(urlCollection: [String]) -> String {
         var tmpArray: [String] = []
         for urlString in urlCollection {
             tmpArray.append(urlString.digits)
         }
         let queryString = tmpArray.joined(separator: ",")
-        print(queryString)
         return queryString
     }
     
+    /// Initial Network Request
     private func startNetworking() {
         Task(priority: .background) {
             let result = await networkService.getSelectedEpisodes(IDs: prepareDataForNetworkCall(urlCollection: character.episode))

@@ -28,7 +28,6 @@ class CharacterInfoModule: UIView
     }
     
     private func initialize() {
-//        self.backgroundColor = .backgroundColor
         self.translatesAutoresizingMaskIntoConstraints = false
         self.clipsToBounds = true
         addSubviews()
@@ -39,20 +38,20 @@ class CharacterInfoModule: UIView
         self.addSubview(characterName)
         self.addSubview(characterImageView)
         self.addSubview(mainStack)
-        mainStack.addArrangedSubview(VstackL)
-        mainStack.addArrangedSubview(VstackR)
+        mainStack.addArrangedSubview(verticalStackL)
+        mainStack.addArrangedSubview(verticalStackR)
         
-        VstackL.addArrangedSubview(characterStatusLabel)
-        VstackL.addArrangedSubview(characterSpeciesLabel)
-        VstackL.addArrangedSubview(characterGenderLabel)
-        VstackL.addArrangedSubview(characterDimensionLabel)
-        VstackL.addArrangedSubview(characterOriginLabel)
+        verticalStackL.addArrangedSubview(characterStatusLabel)
+        verticalStackL.addArrangedSubview(characterSpeciesLabel)
+        verticalStackL.addArrangedSubview(characterGenderLabel)
+        verticalStackL.addArrangedSubview(characterDimensionLabel)
+        verticalStackL.addArrangedSubview(characterOriginLabel)
         
-        VstackR.addArrangedSubview(characterStatus)
-        VstackR.addArrangedSubview(characterSpecies)
-        VstackR.addArrangedSubview(characterGender)
-        VstackR.addArrangedSubview(characterDimension)
-        VstackR.addArrangedSubview(characterOrigin)
+        verticalStackR.addArrangedSubview(characterStatus)
+        verticalStackR.addArrangedSubview(characterSpecies)
+        verticalStackR.addArrangedSubview(characterGender)
+        verticalStackR.addArrangedSubview(characterDimension)
+        verticalStackR.addArrangedSubview(characterOrigin)
    
     }
     
@@ -85,7 +84,7 @@ class CharacterInfoModule: UIView
         return stack
     }()
     
-    private var VstackL: UIStackView = {
+    private var verticalStackL: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.distribution = .fill
@@ -94,7 +93,7 @@ class CharacterInfoModule: UIView
         return stack
     }()
    
-    private var VstackR: UIStackView = {
+    private var verticalStackR: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.distribution = .fill

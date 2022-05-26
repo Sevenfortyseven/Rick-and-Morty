@@ -18,7 +18,7 @@ class EpisodeDetailsviewController: UIViewController
     
     public var viewModel: EpisodeDetailsViewModel
     
-    private var episodeInfoModule = EpisodeInfoModule()
+    private lazy var episodeInfoModule = EpisodeInfoModule()
     
     // MARK: -- Initialization
     
@@ -72,11 +72,6 @@ class EpisodeDetailsviewController: UIViewController
         }
     }
     
-    // MARK: -- UI Configuration --
-
-    
-    
-    
     // MARK: -- UI Elements --
     
     private var background: UIImageView = {
@@ -116,7 +111,10 @@ class EpisodeDetailsviewController: UIViewController
     
     @objc
     private func watchButtonPressed() {
-        UIApplication.shared.openURL(viewModel.watchEpisode())
+        if let url = viewModel.watchEpisode() {
+            UIApplication.shared.open(url, options: [:])
+        }
+        
     }
     
     // MARK: -- Targets and Actions --

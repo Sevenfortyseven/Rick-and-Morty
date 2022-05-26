@@ -5,7 +5,6 @@
 //  Created by aleksandre on 25.05.22.
 //
 
-import Foundation
 import UIKit
 
 class CharactersCollectionCell: UICollectionViewCell
@@ -32,12 +31,7 @@ class CharactersCollectionCell: UICollectionViewCell
     required init?(coder: NSCoder) {
         fatalError("")
     }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-//        characterImage.roundCorners(corners: .allCorners, radius: .small)
-    }
-    
+
     private func addSubviews() {
         contentView.addSubview(characterImage)
         contentView.addSubview(characterName)

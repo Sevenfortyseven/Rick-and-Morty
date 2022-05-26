@@ -11,8 +11,5 @@ import Foundation
 enum ImageStore: String
 {
     case mainBackground = "main_wallpaper"
-    
-    
-
     case placeholderImg = "rickPlaceholderImage"
 }

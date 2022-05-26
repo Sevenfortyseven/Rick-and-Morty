@@ -19,7 +19,7 @@ final class EpisodesViewController: UIViewController
     
     public var viewModel: EpisodesViewModel
     
-    private var searchBarModule = SearchBarModule()
+    private lazy var searchBarModule = SearchBarModule()
     
     // MARK: -- Initialization --
     
@@ -42,14 +42,6 @@ final class EpisodesViewController: UIViewController
         setupSearchbar()
         bindToViewModel()
         keyboardConfiguration()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
     }
     
     private func addSubviews() {

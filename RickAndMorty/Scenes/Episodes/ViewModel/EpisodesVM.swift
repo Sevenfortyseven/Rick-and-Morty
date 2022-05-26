@@ -18,13 +18,11 @@ final class EpisodesViewModel
     
     /// If value changes, it means that pagination is needed
     ///  didset forces to refetch data for updated value( page)
-    private var currentPage: Int = 1 {
-        didSet {
-            print(currentPage)
-        }
-    }
-    
-    /// Fetched CellViewModels
+    private var currentPage: Int = 1
+   
+        
+    /// Fetched CellViewModels via Initial network request
+    /// or by paginating
     private var fetchedEpisodesData: [Episode]? {
         didSet {
             guard fetchedEpisodesData != nil else { return }
@@ -43,7 +41,8 @@ final class EpisodesViewModel
     
     // MARK: -- Public States --
     
-    public var episodesStore = [Episode]() {
+    /// Stored data // Datasource for TableView
+    public var episodesStore: [Episode] = [] {
         didSet {
             reloadNeeded.value = !reloadNeeded.value
         }
@@ -72,11 +71,10 @@ final class EpisodesViewModel
             let result = await networkService.getAllEpisodes(page: currentPage)
             switch result {
             case .success(let response):
-                print(response.info)
                 maximumPages = response.info.pages
                 populateDataStore(initialData: response.results)
             case .failure(let error):
-                print(error)
+                dump(error)
             }
         }
     }
