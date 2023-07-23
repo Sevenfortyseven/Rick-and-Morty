@@ -7,8 +7,7 @@
 
 import Foundation
 
-final class EpisodesViewModel
-{
+final class EpisodesViewModel {
     
     // MARK: -- Private States --
     private let networkService: EpisodeService
@@ -19,10 +18,13 @@ final class EpisodesViewModel
     /// If value changes, it means that pagination is needed
     ///  didset forces to refetch data for updated value( page)
     private var currentPage: Int = 1
-   
-        
+
     /// Fetched CellViewModels via Initial network request
     /// or by paginating
+
+    /// Keep track of the latest search query
+    private var currentSearchQuery: String?
+
     private var fetchedEpisodesData: [Episode]? {
         didSet {
             guard fetchedEpisodesData != nil else { return }
@@ -96,7 +98,7 @@ final class EpisodesViewModel
     /// check internet connection before requesting
     private func sendSearchRequest(with searchText: String) {
         guard NetworkMonitor.shared.isConnected else { return }
-        Task(priority: .background) {
+        Task(priority: .high) {
             let result = await networkService.searchEpisodes(searchText: searchText)
             switch result {
             case .success(let response):
@@ -108,7 +110,7 @@ final class EpisodesViewModel
     }
     
     /// Check searchText before sending a request
-    /// if  searchText is empty, append  dataSource data with
+    /// if searchText is empty, append  dataSource data with
     /// fetched items and make search dataSource nil
     public func search(with searchText: String) {
         guard searchText != "", fetchedEpisodesData != nil else {
@@ -118,9 +120,13 @@ final class EpisodesViewModel
             filteredEpisodesData = nil
             return
         }
-        
-        sendSearchRequest(with: searchText)
-        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+            guard let self = self else { return }
+            if searchText == self.currentSearchQuery {
+                self.sendSearchRequest(with: searchText)
+            }
+        }
+        currentSearchQuery = searchText
     }
     
     /// Paginate if more pages are available and searchedData is nil
