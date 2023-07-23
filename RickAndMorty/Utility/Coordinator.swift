@@ -7,12 +7,12 @@
 
 import UIKit
 
-final class Coordinator
-{
+final class Coordinator {
     private var navigationController: UINavigationController
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
+        updateUI()
     }
     
     public func start() {
@@ -22,7 +22,27 @@ final class Coordinator
         episodesVC.delegate = self
         navigationController.setViewControllers([episodesVC], animated: false)
     }
-    
+
+    private func updateUI() {
+        if #available(iOS 15, *) {
+            let navigationBarAppearance = UINavigationBarAppearance()
+            navigationBarAppearance.configureWithOpaqueBackground()
+            navigationBarAppearance.titleTextAttributes = [
+                NSAttributedString.Key.foregroundColor : UIColor.white
+            ]
+            navigationBarAppearance.backgroundColor = UIColor.backgroundColor
+            navigationBarAppearance.shadowColor = .clear
+            UINavigationBar.appearance().standardAppearance = navigationBarAppearance
+            UINavigationBar.appearance().compactAppearance = navigationBarAppearance
+            UINavigationBar.appearance().scrollEdgeAppearance = navigationBarAppearance
+
+            let tabBarApperance = UITabBarAppearance()
+            tabBarApperance.configureWithOpaqueBackground()
+            tabBarApperance.backgroundColor = UIColor.blue
+            UITabBar.appearance().scrollEdgeAppearance = tabBarApperance
+            UITabBar.appearance().standardAppearance = tabBarApperance
+        }
+    }
 }
 
 extension Coordinator: EpisodesViewControllerDelegate

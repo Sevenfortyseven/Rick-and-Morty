@@ -15,15 +15,13 @@ class ObservableObject<T> {
             listener?(value)
         }
     }
-    
-    
+
     init(value: T) {
         self.value = value
     }
     
     var listener: ((T) -> Void)?
-    
-    
+
     func bind(listener: @escaping ((T) -> Void)) {
         listener(value)
         self.listener = listener

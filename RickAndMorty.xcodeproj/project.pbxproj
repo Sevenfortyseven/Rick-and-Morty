@@ -29,6 +29,7 @@
 		9F76AF34283D1531005E7ED9 /* Info.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F76AF33283D1531005E7ED9 /* Info.swift */; };
 		9F76AF3D283D22C7005E7ED9 /* CharacterDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F76AF3C283D22C7005E7ED9 /* CharacterDetailsVC.swift */; };
 		9F76AF4B283D3D23005E7ED9 /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F76AF4A283D3D23005E7ED9 /* GlobalConstants.swift */; };
+		9FB2D86F2A6D84E30063BF45 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB2D86E2A6D84E30063BF45 /* BaseViewController.swift */; };
 		9FF18175283D46880018544F /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF18174283D46880018544F /* UIColor+.swift */; };
 		9FF18178283D4F2E0018544F /* ObservableObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF18177283D4F2E0018544F /* ObservableObject.swift */; };
 		9FF1817A283D79BE0018544F /* SearchBarModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF18179283D79BE0018544F /* SearchBarModule.swift */; };
@@ -72,6 +73,7 @@
 		9F76AF33283D1531005E7ED9 /* Info.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Info.swift; sourceTree = "<group>"; };
 		9F76AF3C283D22C7005E7ED9 /* CharacterDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailsVC.swift; sourceTree = "<group>"; };
 		9F76AF4A283D3D23005E7ED9 /* GlobalConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConstants.swift; sourceTree = "<group>"; };
+		9FB2D86E2A6D84E30063BF45 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		9FF18174283D46880018544F /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
 		9FF18177283D4F2E0018544F /* ObservableObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableObject.swift; sourceTree = "<group>"; };
 		9FF18179283D79BE0018544F /* SearchBarModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarModule.swift; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 		9F76AF0A283CE262005E7ED9 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				9FB2D86E2A6D84E30063BF45 /* BaseViewController.swift */,
 				9F76AF0D283CE28B005E7ED9 /* Coordinator.swift */,
 				9F76AF16283CEE1F005E7ED9 /* ImageStore.swift */,
 				9FF18177283D4F2E0018544F /* ObservableObject.swift */,
@@ -468,6 +471,7 @@
 				9F6DCBCC283EFADF0071EA2C /* AlertManager.swift in Sources */,
 				9FF3D5FF283EDAA4008C65ED /* Imovies.swift in Sources */,
 				9F76AF1D283CFEED005E7ED9 /* Endpoint.swift in Sources */,
+				9FB2D86F2A6D84E30063BF45 /* BaseViewController.swift in Sources */,
 				9FF18178283D4F2E0018544F /* ObservableObject.swift in Sources */,
 				9FF3D5F9283E8230008C65ED /* CharacterDetailsVM.swift in Sources */,
 				9F76AEF8283CE1BA005E7ED9 /* EpisodesVC.swift in Sources */,
@@ -631,10 +635,12 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8JDHD2Z7HU;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RickAndMorty/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -658,10 +664,12 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8JDHD2Z7HU;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RickAndMorty/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";

@@ -7,18 +7,14 @@
 
 import UIKit
 
-protocol EpisodesViewControllerDelegate: AnyObject
-{
+protocol EpisodesViewControllerDelegate: AnyObject {
     func didSelect(episode: Episode)
 }
 
 
-final class EpisodesViewController: UIViewController
-{
+final class EpisodesViewController: BaseViewController {
     weak var delegate: EpisodesViewControllerDelegate?
-    
     public var viewModel: EpisodesViewModel
-    
     private lazy var searchBarModule = SearchBarModule()
     
     // MARK: -- Initialization --
@@ -45,7 +41,6 @@ final class EpisodesViewController: UIViewController
     }
     
     private func addSubviews() {
-        view.addSubview(background)
         view.addSubview(episodesTableView)
         view.addSubview(searchBarModule)
         view.addSubview(episodesLabel)
@@ -68,7 +63,6 @@ final class EpisodesViewController: UIViewController
     // MARK: -- UI Configuration --
     
     private func updateUI() {
-        view.backgroundColor = .white
     }
     
     /// Dismiss keyboard  with taps on the screen
@@ -83,15 +77,7 @@ final class EpisodesViewController: UIViewController
     }
     
     // MARK: -- UI Elements --
-    
-    private var background: UIImageView = {
-        let background = UIImageView()
-        background.translatesAutoresizingMaskIntoConstraints = false
-        background.contentMode = .scaleToFill
-        background.image = UIImage(named: ImageStore.mainBackground.rawValue)
-        return background
-    }()
-    
+
     private var episodesTableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -135,6 +121,7 @@ extension EpisodesViewController: UITableViewDelegate, UITableViewDataSource
         episodesTableView.register(EpisodeCell.self, forCellReuseIdentifier: EpisodeCell.identifier)
         episodesTableView.delegate = self
         episodesTableView.dataSource = self
+        episodesTableView.tintColor = .secondaryColor
     }
     
     
@@ -168,15 +155,10 @@ extension EpisodesViewController
     
     private func initializeConstraints() {
         var constraints = [NSLayoutConstraint]()
-        
-        constraints.append(background.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor))
-        constraints.append(background.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor))
-        constraints.append(background.topAnchor.constraint(equalTo: view.topAnchor))
-        constraints.append(background.bottomAnchor.constraint(equalTo: view.bottomAnchor))
-        
+
         constraints.append(episodesTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor))
         constraints.append(episodesTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor))
-        constraints.append(episodesTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor))
+        constraints.append(episodesTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor))
         constraints.append(episodesTableView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: GlobalConstants.scrollViewHMulti))
         
         constraints.append(searchBarModule.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor))

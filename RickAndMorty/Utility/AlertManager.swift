@@ -8,14 +8,11 @@
 import UIKit
 
 
-struct AlertManager
-{
-    
+struct AlertManager {
     enum AlertType {
         case networkError
     }
-    
-    
+
     static func initializeAlert(show alert: AlertType, on targetVC: UIViewController) {
         switch alert {
         case .networkError:
@@ -24,5 +21,4 @@ struct AlertManager
             targetVC.present(alert, animated: true)
         }
     }
-    
 }

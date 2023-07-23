@@ -8,11 +8,8 @@
 import UIKit
 
 
-extension UIColor
-{
-    
-    // Custom Colors
-    
+extension UIColor{
+
     static var tableViewBackgroundColor: UIColor {
         return self.init(named: "tableview_background_color")!
     }
@@ -20,9 +17,16 @@ extension UIColor
     static var searchBarBackgroundColor: UIColor {
         return self.init(named: "searchbar_background_color")!
     }
-    
+
     static var backgroundColor: UIColor {
-        return self.init(named: "background_color1")!
+        return self.init(named: "primary_color")!
     }
-    
+
+    static var secondaryColor: UIColor {
+        return self.init(named: "secondary_color")!
+    }
+
+    static var accentColor: UIColor {
+        return self.init(named: "accent_color")!
+    }
 }

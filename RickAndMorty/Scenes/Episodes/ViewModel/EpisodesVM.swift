@@ -131,7 +131,6 @@ final class EpisodesViewModel
               NetworkMonitor.shared.isConnected
         else { return }
         
-        
         if indexPath.row == episodesStore.count - 1 &&
             currentPage < maximumPages {
             paginate()

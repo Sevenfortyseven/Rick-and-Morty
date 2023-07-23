@@ -9,7 +9,6 @@ import UIKit
 
 extension UIView
 {
-    
     enum CurveRadius {
         case small, medium
     }
