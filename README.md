@@ -43,3 +43,10 @@ Features
 * Without 3rd party libraries
 * UI built with standard UIKit library, programatically
 
+### Update
+* Added support for Landscape mode
+* Added support for dark/light theme
+* removed background theme
+* added color dark/light color schemes as a background
+* Fixed bug with network error alert not appearing
+
