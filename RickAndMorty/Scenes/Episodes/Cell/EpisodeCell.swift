@@ -11,7 +11,9 @@ import UIKit
 final class EpisodeCell: UITableViewCell
 {
     private(set) static var identifier = String(describing: EpisodeCell.self)
-    
+    private var landscapeConstraints: [NSLayoutConstraint] = []
+    private var portraitConstraints: [NSLayoutConstraint] = []
+
     public var data: Episode? {
         didSet {
             updateContentView()
@@ -33,6 +35,7 @@ final class EpisodeCell: UITableViewCell
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        initializeConstraints()
     }
     
     private func addSubviews() {
@@ -55,7 +58,7 @@ final class EpisodeCell: UITableViewCell
     
     
     private func updateUI() {
-        backgroundColor = .tableViewBackgroundColor
+        backgroundColor = .secondaryColor
         selectionStyle = .none
     }
     
@@ -96,19 +99,31 @@ extension EpisodeCell
     // MARK: -- Constraints --
     
     private func initializeConstraints() {
-        var constraints = [NSLayoutConstraint]()
+          NSLayoutConstraint.deactivate(landscapeConstraints + portraitConstraints)
+          landscapeConstraints.removeAll()
+          portraitConstraints.removeAll()
 
-        constraints.append(namelabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: GlobalConstants.ScrollView.leadingOffset))
-        constraints.append(namelabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: GlobalConstants.ScrollView.topOffset))
-        
-        constraints.append(airDateLabel.leadingAnchor.constraint(equalTo: namelabel.leadingAnchor))
-        constraints.append(airDateLabel.topAnchor.constraint(equalTo: namelabel.bottomAnchor, constant: GlobalConstants.ScrollView.itemPadding))
-        
-        constraints.append(episodeLabel.leadingAnchor.constraint(equalTo: namelabel.trailingAnchor, constant: GlobalConstants.ScrollView.itemPadding))
-        constraints.append(episodeLabel.firstBaselineAnchor.constraint(equalTo: namelabel.firstBaselineAnchor))
-        constraints.append(episodeLabel.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: GlobalConstants.ScrollView.trailingOffset))
-        
-        NSLayoutConstraint.activate(constraints)
-    }
+          portraitConstraints.append(namelabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: GlobalConstants.ScrollView.leadingOffset))
+          portraitConstraints.append(namelabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: GlobalConstants.ScrollView.topOffset))
+
+          portraitConstraints.append(airDateLabel.leadingAnchor.constraint(equalTo: namelabel.leadingAnchor))
+          portraitConstraints.append(airDateLabel.topAnchor.constraint(equalTo: namelabel.bottomAnchor, constant: GlobalConstants.ScrollView.itemPadding))
+
+          portraitConstraints.append(episodeLabel.leadingAnchor.constraint(equalTo: namelabel.trailingAnchor, constant: GlobalConstants.ScrollView.itemPadding))
+          portraitConstraints.append(episodeLabel.firstBaselineAnchor.constraint(equalTo: namelabel.firstBaselineAnchor))
+          portraitConstraints.append(episodeLabel.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: GlobalConstants.ScrollView.trailingOffset))
+
+          landscapeConstraints.append(namelabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: GlobalConstants.ScrollView.leadingOffset))
+          landscapeConstraints.append(namelabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: GlobalConstants.ScrollView.topOffset))
+
+          landscapeConstraints.append(airDateLabel.leadingAnchor.constraint(equalTo: namelabel.trailingAnchor, constant: GlobalConstants.ScrollView.itemPadding))
+          landscapeConstraints.append(airDateLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: GlobalConstants.ScrollView.topOffset))
+
+          landscapeConstraints.append(episodeLabel.leadingAnchor.constraint(equalTo: airDateLabel.trailingAnchor, constant: GlobalConstants.ScrollView.itemPadding))
+          landscapeConstraints.append(episodeLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: GlobalConstants.ScrollView.topOffset))
+
+          let constraints = UIDevice.current.isLandscapeOrFlat ? landscapeConstraints : portraitConstraints
+          NSLayoutConstraint.activate(constraints)
+      }
     
 }

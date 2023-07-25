@@ -16,6 +16,8 @@ final class EpisodesViewController: BaseViewController {
     weak var delegate: EpisodesViewControllerDelegate?
     public var viewModel: EpisodesViewModel
     private lazy var searchBarModule = SearchBarModule()
+    private var landscapeConstraints: [NSLayoutConstraint] = []
+    private var portraitConstraints: [NSLayoutConstraint] = []
     
     // MARK: -- Initialization --
     
@@ -39,6 +41,11 @@ final class EpisodesViewController: BaseViewController {
         bindToViewModel()
         keyboardConfiguration()
     }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+          super.viewWillTransition(to: size, with: coordinator)
+          initializeConstraints()
+      }
     
     private func addSubviews() {
         view.addSubview(episodesTableView)
@@ -121,7 +128,7 @@ extension EpisodesViewController: UITableViewDelegate, UITableViewDataSource
         episodesTableView.register(EpisodeCell.self, forCellReuseIdentifier: EpisodeCell.identifier)
         episodesTableView.delegate = self
         episodesTableView.dataSource = self
-        episodesTableView.tintColor = .secondaryColor
+ 
     }
     
     
@@ -137,7 +144,7 @@ extension EpisodesViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return tableView.bounds.height * GlobalConstants.tableViewCellHMulti
+        return 70
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -152,22 +159,37 @@ extension EpisodesViewController: UITableViewDelegate, UITableViewDataSource
 extension EpisodesViewController
 {
     // MARK: -- Constraints --
-    
     private func initializeConstraints() {
-        var constraints = [NSLayoutConstraint]()
+        // Clear existing constraints
+        NSLayoutConstraint.deactivate(landscapeConstraints + portraitConstraints)
+        landscapeConstraints.removeAll()
+        portraitConstraints.removeAll()
 
-        constraints.append(episodesTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor))
-        constraints.append(episodesTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor))
-        constraints.append(episodesTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor))
-        constraints.append(episodesTableView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: GlobalConstants.scrollViewHMulti))
-        
-        constraints.append(searchBarModule.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor))
-        constraints.append(searchBarModule.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor))
-        constraints.append(searchBarModule.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor))
-        
-        constraints.append(episodesLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: GlobalConstants.leadingOffset))
-        constraints.append(episodesLabel.bottomAnchor.constraint(equalTo: episodesTableView.topAnchor, constant: GlobalConstants.itemOffsetN))
-        
+        portraitConstraints.append(episodesTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor))
+        portraitConstraints.append(episodesTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor))
+        portraitConstraints.append(episodesTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor))
+        portraitConstraints.append(episodesTableView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: GlobalConstants.scrollViewHMulti))
+
+        portraitConstraints.append(searchBarModule.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor))
+        portraitConstraints.append(searchBarModule.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor))
+        portraitConstraints.append(searchBarModule.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor))
+
+        portraitConstraints.append(episodesLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: GlobalConstants.leadingOffset))
+        portraitConstraints.append(episodesLabel.bottomAnchor.constraint(equalTo: episodesTableView.topAnchor, constant: GlobalConstants.itemOffsetN))
+
+        landscapeConstraints.append(episodesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor))
+        landscapeConstraints.append(episodesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor))
+        landscapeConstraints.append(episodesTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor))
+        landscapeConstraints.append(episodesTableView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.6))
+
+        landscapeConstraints.append(searchBarModule.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor))
+        landscapeConstraints.append(searchBarModule.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor))
+        landscapeConstraints.append(searchBarModule.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor))
+
+        landscapeConstraints.append(episodesLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: GlobalConstants.leadingOffset))
+        landscapeConstraints.append(episodesLabel.bottomAnchor.constraint(equalTo: episodesTableView.topAnchor, constant: GlobalConstants.itemOffsetN))
+
+        let constraints = UIDevice.current.isLandscapeOrFlat ? landscapeConstraints : portraitConstraints
         NSLayoutConstraint.activate(constraints)
     }
     

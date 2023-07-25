@@ -8,9 +8,9 @@
 import UIKit
 
 
-class CharacterInfoModule: UIView
-{
-    
+class CharacterInfoModule: UIView {
+    private var landscapeConstraints: [NSLayoutConstraint] = []
+    private var portraitConstraints: [NSLayoutConstraint] = []
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -24,6 +24,8 @@ class CharacterInfoModule: UIView
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        initializeConstraints()
+        setNeedsLayout()
         characterImageView.roundCorners(corners: .allCorners, radius: .small)
     }
     
@@ -188,20 +190,37 @@ class CharacterInfoModule: UIView
     }()
     
     private func initializeConstraints () {
-        var constraints = [NSLayoutConstraint]()
-        
-        constraints.append(characterName.leadingAnchor.constraint(equalTo: characterImageView.leadingAnchor, constant: GlobalConstants.leadingOffset))
-        constraints.append(characterName.topAnchor.constraint(equalTo: self.topAnchor))
-        
-        constraints.append(characterImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: GlobalConstants.leadingOffset))
-        constraints.append(characterImageView.topAnchor.constraint(equalTo: characterName.bottomAnchor, constant: GlobalConstants.itemOffset))
-        constraints.append(characterImageView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: GlobalConstants.imageSizeMulti))
-        constraints.append(characterImageView.widthAnchor.constraint(equalTo: characterImageView.heightAnchor))
+        NSLayoutConstraint.deactivate(landscapeConstraints + portraitConstraints)
+        landscapeConstraints.removeAll()
+        portraitConstraints.removeAll()
 
-        constraints.append(mainStack.leadingAnchor.constraint(equalTo: characterImageView.trailingAnchor, constant: GlobalConstants.itemOffset))
-        constraints.append(mainStack.centerYAnchor.constraint(equalTo: characterImageView.centerYAnchor))
-        constraints.append(mainStack.trailingAnchor.constraint(lessThanOrEqualTo: self.trailingAnchor))
         
+        portraitConstraints.append(characterName.leadingAnchor.constraint(equalTo: characterImageView.leadingAnchor, constant: GlobalConstants.leadingOffset))
+        portraitConstraints.append(characterName.topAnchor.constraint(equalTo: self.topAnchor))
+        
+        portraitConstraints.append(characterImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: GlobalConstants.leadingOffset))
+        portraitConstraints.append(characterImageView.topAnchor.constraint(equalTo: characterName.bottomAnchor, constant: GlobalConstants.itemOffset))
+        portraitConstraints.append(characterImageView.heightAnchor.constraint(equalToConstant: 150.0))
+        portraitConstraints.append(characterImageView.widthAnchor.constraint(equalToConstant: 150.0))
+
+        portraitConstraints.append(mainStack.leadingAnchor.constraint(equalTo: characterImageView.trailingAnchor, constant: GlobalConstants.itemOffset))
+        portraitConstraints.append(mainStack.centerYAnchor.constraint(equalTo: characterImageView.centerYAnchor))
+        portraitConstraints.append(mainStack.trailingAnchor.constraint(lessThanOrEqualTo: self.trailingAnchor))
+
+        landscapeConstraints.append(characterName.trailingAnchor.constraint(equalTo: self.trailingAnchor))
+        landscapeConstraints.append(characterName.topAnchor.constraint(equalTo: mainStack.topAnchor))
+
+        landscapeConstraints.append(characterImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor))
+        landscapeConstraints.append(characterImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: GlobalConstants.leadingOffset))
+        landscapeConstraints.append(characterImageView.heightAnchor.constraint(equalToConstant: 150.0))
+        landscapeConstraints.append(characterImageView.widthAnchor.constraint(equalToConstant: 150.0))
+
+        landscapeConstraints.append(mainStack.leadingAnchor.constraint(equalTo: characterImageView.trailingAnchor, constant: GlobalConstants.itemOffset))
+        landscapeConstraints.append(mainStack.centerYAnchor.constraint(equalTo: characterImageView.centerYAnchor))
+
+
+        
+        let constraints = UIDevice.current.isLandscapeOrFlat ? landscapeConstraints : portraitConstraints
         NSLayoutConstraint.activate(constraints)
     }
     

@@ -7,19 +7,17 @@
 
 import UIKit
 
-protocol CharacterDetailsViewControllerDelegate: AnyObject
-{
+protocol CharacterDetailsViewControllerDelegate: AnyObject {
     func episodeSelected(episode: Episode)
 }
 
 
-final class CharacterDetailsViewController: UIViewController
-{
+final class CharacterDetailsViewController: BaseViewController {
     weak var delegate: CharacterDetailsViewControllerDelegate?
-    
     public var viewModel: CharacterDetailsViewModel
-    
     private lazy var characterInfoModule = CharacterInfoModule()
+    private var landscapeConstraints: [NSLayoutConstraint] = []
+    private var portraitConstraints: [NSLayoutConstraint] = []
     
     // MARK: -- Initialization --
     
@@ -40,15 +38,16 @@ final class CharacterDetailsViewController: UIViewController
         bindToVM()
     }
     
-    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+          super.viewWillTransition(to: size, with: coordinator)
+          initializeConstraints()
+      }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        background.removeFromSuperview()
     }
     
     private func addSubviews() {
-        view.addSubview(background)
         view.addSubview(episodesTableView)
         view.addSubview(episodesLabel)
         view.addSubview(characterInfoModule)
@@ -92,16 +91,7 @@ final class CharacterDetailsViewController: UIViewController
     
     
     // MARK: -- UI Elements --
-    
-    
-    private var background: UIImageView = {
-        let background = UIImageView()
-        background.translatesAutoresizingMaskIntoConstraints = false
-        background.contentMode = .scaleToFill
-        background.image = UIImage(named: ImageStore.mainBackground.rawValue)
-        return background
-    }()
-    
+
     private var episodesTableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -121,8 +111,7 @@ final class CharacterDetailsViewController: UIViewController
 }
 
 
-extension CharacterDetailsViewController: UITableViewDelegate, UITableViewDataSource
-{
+extension CharacterDetailsViewController: UITableViewDelegate, UITableViewDataSource {
     
     // MARK: -- TableView Configuration & Delegate Methods
     
@@ -143,7 +132,7 @@ extension CharacterDetailsViewController: UITableViewDelegate, UITableViewDataSo
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return tableView.bounds.height * GlobalConstants.tableViewCellHMulti
+        return 70
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -157,27 +146,38 @@ extension CharacterDetailsViewController
     // MARK: -- Constraints --
     
     private func initializeConstraints() {
-        var constraints = [NSLayoutConstraint]()
+        NSLayoutConstraint.deactivate(landscapeConstraints + portraitConstraints)
+        landscapeConstraints.removeAll()
+        portraitConstraints.removeAll()
+
+        portraitConstraints.append(episodesTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor))
+        portraitConstraints.append(episodesTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor))
+        portraitConstraints.append(episodesTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor))
+        portraitConstraints.append(episodesTableView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: GlobalConstants.scrollViewHMultiSmall))
         
-        constraints.append(background.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor))
-        constraints.append(background.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor))
-        constraints.append(background.topAnchor.constraint(equalTo: view.topAnchor))
-        constraints.append(background.bottomAnchor.constraint(equalTo: view.bottomAnchor))
+        portraitConstraints.append(episodesLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: GlobalConstants.leadingOffset))
+        portraitConstraints.append(episodesLabel.bottomAnchor.constraint(equalTo: episodesTableView.topAnchor, constant: GlobalConstants.itemOffsetN))
         
-        constraints.append(episodesTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor))
-        constraints.append(episodesTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor))
-        constraints.append(episodesTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor))
-        constraints.append(episodesTableView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: GlobalConstants.scrollViewHMultiSmall))
-        
-        constraints.append(episodesLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: GlobalConstants.leadingOffset))
-        constraints.append(episodesLabel.bottomAnchor.constraint(equalTo: episodesTableView.topAnchor, constant: GlobalConstants.itemOffsetN))
-        
-        constraints.append(characterInfoModule.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor))
-        constraints.append(characterInfoModule.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor))
-        constraints.append(characterInfoModule.bottomAnchor.constraint(equalTo: episodesLabel.topAnchor, constant: GlobalConstants.itemOffsetN))
-        constraints.append(characterInfoModule.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.3))
-        
-        
+        portraitConstraints.append(characterInfoModule.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor))
+        portraitConstraints.append(characterInfoModule.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor))
+        portraitConstraints.append(characterInfoModule.bottomAnchor.constraint(equalTo: episodesLabel.topAnchor, constant: GlobalConstants.itemOffsetN))
+        portraitConstraints.append(characterInfoModule.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.3))
+
+        landscapeConstraints.append(episodesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor))
+        landscapeConstraints.append(episodesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor))
+        landscapeConstraints.append(episodesTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor))
+        landscapeConstraints.append(episodesTableView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.4))
+
+        landscapeConstraints.append(episodesLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: GlobalConstants.trailingOffset))
+        landscapeConstraints.append(episodesLabel.bottomAnchor.constraint(equalTo: episodesTableView.topAnchor, constant: GlobalConstants.itemOffsetN))
+
+        landscapeConstraints.append(characterInfoModule.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor))
+        landscapeConstraints.append(characterInfoModule.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: GlobalConstants.trailingOffset))
+        landscapeConstraints.append(characterInfoModule.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor))
+        landscapeConstraints.append(characterInfoModule.bottomAnchor.constraint(equalTo: episodesTableView.topAnchor, constant: GlobalConstants.botOffset))
+
+
+        let constraints = UIDevice.current.isLandscapeOrFlat ? landscapeConstraints : portraitConstraints
         NSLayoutConstraint.activate(constraints)
     }
 }

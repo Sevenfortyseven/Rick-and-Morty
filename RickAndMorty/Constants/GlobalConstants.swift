@@ -18,6 +18,10 @@ struct GlobalConstants
     static var scrollViewHMulti: CGFloat {
         return 0.70
     }
+
+    static var scrollViewHMultiMedium: CGFloat {
+        return 0.65
+    }
     
     static var scrollViewHMultiSmall: CGFloat {
         return 0.5

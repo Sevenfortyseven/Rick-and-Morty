@@ -7,25 +7,22 @@
 
 import UIKit
 
-protocol EpisodeDetailsViewControllerDelegate: AnyObject
-{
+protocol EpisodeDetailsViewControllerDelegate: AnyObject {
     func didSelect(character: Character)
 }
 
-class EpisodeDetailsviewController: UIViewController
-{
+class EpisodeDetailsviewController: BaseViewController {
     weak var delegate: EpisodeDetailsViewControllerDelegate?
-    
     public var viewModel: EpisodeDetailsViewModel
-    
     private lazy var episodeInfoModule = EpisodeInfoModule()
+    private var landscapeConstraints: [NSLayoutConstraint] = []
+    private var portraitConstraints: [NSLayoutConstraint] = []
     
     // MARK: -- Initialization
     
     init(viewModel: EpisodeDetailsViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        view.backgroundColor = .brown
     }
     
     required init?(coder: NSCoder) {
@@ -40,10 +37,14 @@ class EpisodeDetailsviewController: UIViewController
         bindToVM()
         addTargets()
     }
-    
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        initializeConstraints()
+    }
+
     
     private func addSubviews() {
-        view.addSubview(background)
         view.addSubview(charactersCollectionView)
         view.addSubview(charactersLabel)
         view.addSubview(episodeInfoModule)
@@ -74,14 +75,6 @@ class EpisodeDetailsviewController: UIViewController
     
     // MARK: -- UI Elements --
     
-    private var background: UIImageView = {
-        let background = UIImageView()
-        background.translatesAutoresizingMaskIntoConstraints = false
-        background.contentMode = .scaleToFill
-        background.image = UIImage(named: ImageStore.mainBackground.rawValue)
-        return background
-    }()
-    
     private let charactersCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -105,7 +98,7 @@ class EpisodeDetailsviewController: UIViewController
         let btn = UIButton(configuration: config)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.setTitle("Watch", for: .normal)
-        btn.tintColor = .purple
+        btn.tintColor = .accentColor
         return btn
     }()
     
@@ -149,8 +142,7 @@ extension EpisodeDetailsviewController: UICollectionViewDelegateFlowLayout, UICo
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.bounds.width * GlobalConstants.collectionCellWMulti,
-                      height: collectionView.bounds.height * GlobalConstants.collectionCellHMulti)
+        return CGSize(width: 175, height: 170)
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -158,33 +150,47 @@ extension EpisodeDetailsviewController: UICollectionViewDelegateFlowLayout, UICo
     }
 }
 
-extension EpisodeDetailsviewController
-{
+extension EpisodeDetailsviewController {
     // MARK: -- Constraints --
     
     private func initializeConstraints() {
-        var constraints = [NSLayoutConstraint]()
-        
-        constraints.append(background.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor))
-        constraints.append(background.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor))
-        constraints.append(background.topAnchor.constraint(equalTo: view.topAnchor))
-        constraints.append(background.bottomAnchor.constraint(equalTo: view.bottomAnchor))
-        
-        constraints.append(charactersCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,constant: GlobalConstants.collectionLeading))
-        constraints.append(charactersCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: GlobalConstants.CollectionTrailing))
-        constraints.append(charactersCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor))
-        constraints.append(charactersCollectionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: GlobalConstants.scrollViewHMulti))
-        
-        constraints.append(charactersLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: GlobalConstants.leadingOffset))
-        constraints.append(charactersLabel.bottomAnchor.constraint(equalTo: charactersCollectionView.topAnchor, constant: GlobalConstants.itemOffsetN))
-        
-        constraints.append(episodeInfoModule.centerXAnchor.constraint(equalTo: view.centerXAnchor))
-        constraints.append(episodeInfoModule.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor))
-        constraints.append(episodeInfoModule.widthAnchor.constraint(lessThanOrEqualTo: view.widthAnchor, multiplier: 0.8))
-        
-        constraints.append(watchButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: GlobalConstants.trailingOffset))
-        constraints.append(watchButton.centerYAnchor.constraint(equalTo: charactersLabel.centerYAnchor))
-        
+        // Clear existing constraints
+        NSLayoutConstraint.deactivate(landscapeConstraints + portraitConstraints)
+        landscapeConstraints.removeAll()
+        portraitConstraints.removeAll()
+
+        portraitConstraints.append(charactersCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: GlobalConstants.collectionLeading))
+        portraitConstraints.append(charactersCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: GlobalConstants.CollectionTrailing))
+        portraitConstraints.append(charactersCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor))
+        portraitConstraints.append(charactersCollectionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: GlobalConstants.scrollViewHMultiMedium))
+
+        portraitConstraints.append(charactersLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: GlobalConstants.leadingOffset))
+        portraitConstraints.append(charactersLabel.bottomAnchor.constraint(equalTo: charactersCollectionView.topAnchor, constant: GlobalConstants.itemOffsetN))
+
+        portraitConstraints.append(episodeInfoModule.centerXAnchor.constraint(equalTo: view.centerXAnchor))
+        portraitConstraints.append(episodeInfoModule.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor))
+        portraitConstraints.append(episodeInfoModule.widthAnchor.constraint(lessThanOrEqualTo: view.widthAnchor, multiplier: 0.8))
+
+        portraitConstraints.append(watchButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: GlobalConstants.trailingOffset))
+        portraitConstraints.append(watchButton.centerYAnchor.constraint(equalTo: charactersLabel.centerYAnchor))
+
+        // Landscape constraints
+        landscapeConstraints.append(charactersCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor))
+        landscapeConstraints.append(charactersCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor))
+        landscapeConstraints.append(charactersCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 120))
+        landscapeConstraints.append(charactersCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor))
+
+        landscapeConstraints.append(charactersLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: GlobalConstants.leadingOffset))
+        landscapeConstraints.append(charactersLabel.bottomAnchor.constraint(equalTo: charactersCollectionView.topAnchor, constant: GlobalConstants.itemOffsetN))
+
+        landscapeConstraints.append(episodeInfoModule.centerXAnchor.constraint(equalTo: view.centerXAnchor))
+        landscapeConstraints.append(episodeInfoModule.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant:  GlobalConstants.ScrollView.itemPadding))
+
+
+        landscapeConstraints.append(watchButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: GlobalConstants.trailingOffset))
+        landscapeConstraints.append(watchButton.centerYAnchor.constraint(equalTo: episodeInfoModule.centerYAnchor))
+
+        let constraints = UIDevice.current.isLandscapeOrFlat ? landscapeConstraints : portraitConstraints
         NSLayoutConstraint.activate(constraints)
     }
     
