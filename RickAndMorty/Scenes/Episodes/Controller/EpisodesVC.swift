@@ -51,6 +51,7 @@ final class EpisodesViewController: BaseViewController {
         view.addSubview(episodesTableView)
         view.addSubview(searchBarModule)
         view.addSubview(episodesLabel)
+        view.addSubview(spinner)
     }
     
     
@@ -63,6 +64,15 @@ final class EpisodesViewController: BaseViewController {
         viewModel.internetConnection.bind { [unowned self] connection in
             if connection == false {
                 AlertManager.initializeAlert(show: .networkError, on: self)
+            }
+        }
+        viewModel.isLoading.bind { [unowned self] isFetching in
+            DispatchQueue.main.async {
+                if isFetching {
+                    self.spinner.startAnimating()
+                } else {
+                    self.spinner.stopAnimating()
+                }
             }
         }
     }
@@ -100,6 +110,14 @@ final class EpisodesViewController: BaseViewController {
         label.font = .preferredFont(forTextStyle: .title1, compatibleWith: .init(legibilityWeight: .bold))
         label.text = "Episodes"
         return label
+    }()
+
+    private var spinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView()
+        spinner.style = .large
+        spinner.color = .accentColor
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        return spinner
     }()
     
 }
@@ -177,6 +195,9 @@ extension EpisodesViewController
         portraitConstraints.append(episodesLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: GlobalConstants.leadingOffset))
         portraitConstraints.append(episodesLabel.bottomAnchor.constraint(equalTo: episodesTableView.topAnchor, constant: GlobalConstants.itemOffsetN))
 
+        portraitConstraints.append(spinner.centerXAnchor.constraint(equalTo: episodesTableView.centerXAnchor))
+        portraitConstraints.append(spinner.centerYAnchor.constraint(equalTo: episodesTableView.centerYAnchor))
+
         landscapeConstraints.append(episodesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor))
         landscapeConstraints.append(episodesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor))
         landscapeConstraints.append(episodesTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor))
@@ -188,6 +209,10 @@ extension EpisodesViewController
 
         landscapeConstraints.append(episodesLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: GlobalConstants.leadingOffset))
         landscapeConstraints.append(episodesLabel.bottomAnchor.constraint(equalTo: episodesTableView.topAnchor, constant: GlobalConstants.itemOffsetN))
+
+        landscapeConstraints.append(spinner.centerXAnchor.constraint(equalTo: episodesTableView.centerXAnchor))
+        landscapeConstraints.append(spinner.centerYAnchor.constraint(equalTo: episodesTableView.centerYAnchor))
+
 
         let constraints = UIDevice.current.isLandscapeOrFlat ? landscapeConstraints : portraitConstraints
         NSLayoutConstraint.activate(constraints)

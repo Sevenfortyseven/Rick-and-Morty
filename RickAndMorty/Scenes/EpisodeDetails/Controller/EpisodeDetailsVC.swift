@@ -49,6 +49,7 @@ class EpisodeDetailsviewController: BaseViewController {
         view.addSubview(charactersLabel)
         view.addSubview(episodeInfoModule)
         view.addSubview(watchButton)
+        view.addSubview(spinner)
     }
     
     private func bindToVM() {
@@ -70,6 +71,15 @@ class EpisodeDetailsviewController: BaseViewController {
         }
         viewModel.episodeAirDate.bind { [unowned self] airDate in
             episodeInfoModule.airDate.text = airDate
+        }
+        viewModel.isLoading.bind { [unowned self] isFetching in
+            DispatchQueue.main.async {
+                if isFetching {
+                    self.spinner.startAnimating()
+                } else {
+                    self.spinner.stopAnimating()
+                }
+            }
         }
     }
     
@@ -100,6 +110,14 @@ class EpisodeDetailsviewController: BaseViewController {
         btn.setTitle("Watch", for: .normal)
         btn.tintColor = .accentColor
         return btn
+    }()
+
+    private var spinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView()
+        spinner.style = .large
+        spinner.color = .accentColor
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        return spinner
     }()
     
     @objc
@@ -174,6 +192,9 @@ extension EpisodeDetailsviewController {
         portraitConstraints.append(watchButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: GlobalConstants.trailingOffset))
         portraitConstraints.append(watchButton.centerYAnchor.constraint(equalTo: charactersLabel.centerYAnchor))
 
+        portraitConstraints.append(spinner.centerXAnchor.constraint(equalTo: charactersCollectionView.centerXAnchor))
+        portraitConstraints.append(spinner.centerYAnchor.constraint(equalTo: charactersCollectionView.centerYAnchor))
+
         // Landscape constraints
         landscapeConstraints.append(charactersCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor))
         landscapeConstraints.append(charactersCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor))
@@ -189,6 +210,9 @@ extension EpisodeDetailsviewController {
 
         landscapeConstraints.append(watchButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: GlobalConstants.trailingOffset))
         landscapeConstraints.append(watchButton.centerYAnchor.constraint(equalTo: episodeInfoModule.centerYAnchor))
+
+        landscapeConstraints.append(spinner.centerXAnchor.constraint(equalTo: charactersCollectionView.centerXAnchor))
+        landscapeConstraints.append(spinner.centerYAnchor.constraint(equalTo: charactersCollectionView.centerYAnchor))
 
         let constraints = UIDevice.current.isLandscapeOrFlat ? landscapeConstraints : portraitConstraints
         NSLayoutConstraint.activate(constraints)

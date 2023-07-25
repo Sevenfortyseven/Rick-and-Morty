@@ -52,6 +52,7 @@ final class EpisodesViewModel {
     
     /// Observes data changes in the ViewModel array
     public var reloadNeeded: ObservableObject<Bool> = ObservableObject(value: false)
+    public var isLoading: ObservableObject<Bool> = ObservableObject(value: false)
     public var internetConnection: ObservableObject<Bool?> = ObservableObject(value: nil)
     
     
@@ -69,13 +70,16 @@ final class EpisodesViewModel {
     
     /// Initial Network Request
     private func startNetworking() {
+        isLoading.value = true
         Task(priority: .background) {
             let result = await networkService.getAllEpisodes(page: currentPage)
             switch result {
             case .success(let response):
                 maximumPages = response.info.pages
                 populateDataStore(initialData: response.results)
+                isLoading.value = false
             case .failure(let error):
+                isLoading.value = false
                 dump(error)
             }
         }

@@ -39,6 +39,7 @@ class CharacterDetailsViewModel
     // MARK: - Observable Objects -
     public var internetConnection: ObservableObject<Bool?> = ObservableObject(value: nil)
     public var reloadNeeded: ObservableObject<Bool> = ObservableObject(value: false)
+    public var isLoading: ObservableObject<Bool> = ObservableObject(value: false)
     public var characterName: ObservableObject<String?> = ObservableObject(value: nil)
     public var characterStatus: ObservableObject<String?> = ObservableObject(value: nil)
     public var characterSpeciesInfo: ObservableObject<String?> = ObservableObject(value: nil)
@@ -72,12 +73,15 @@ class CharacterDetailsViewModel
     
     /// Initial Network Request
     private func startNetworking() {
+        isLoading.value = true
         Task(priority: .background) {
             let result = await networkService.getSelectedEpisodes(IDs: prepareDataForNetworkCall(urlCollection: character.episode))
             switch result {
             case .success(let response):
+                isLoading.value = false
                 episodesStore = response.results
             case .failure(let error):
+                isLoading.value = false
                 dump(error)
             }
         }

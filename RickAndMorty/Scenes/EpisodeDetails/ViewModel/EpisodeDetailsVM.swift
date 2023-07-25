@@ -42,6 +42,7 @@ class EpisodeDetailsViewModel
     
     public var internetConnection: ObservableObject<Bool?> = ObservableObject(value: nil)
     public var reloadNeeded: ObservableObject<Bool> = ObservableObject(value: false)
+    public var isLoading: ObservableObject<Bool> = ObservableObject(value: false)
     public var episodeName: ObservableObject<String?> = ObservableObject(value: nil)
     public var episodeAirDate: ObservableObject<String?> = ObservableObject(value: nil)
     public var episodeinfo: ObservableObject<String?> = ObservableObject(value: nil)
@@ -60,12 +61,15 @@ class EpisodeDetailsViewModel
     
     /// Initial Network Request
     private func startNetworking() {
+        isLoading.value = true
         Task(priority: .background) {
             let result = await networkService.getSelectedCharacters(selectedIDs: prepareDataForNetworkCall(urlCollection: episode.characters))
             switch result {
             case .success(let response):
                 characterStore = response.results
+                isLoading.value = false
             case .failure(let error):
+                isLoading.value = false
                 dump(error)
             }
         }

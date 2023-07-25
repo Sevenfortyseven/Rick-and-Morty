@@ -51,6 +51,7 @@ final class CharacterDetailsViewController: BaseViewController {
         view.addSubview(episodesTableView)
         view.addSubview(episodesLabel)
         view.addSubview(characterInfoModule)
+        view.addSubview(spinner)
     }
     
     private func bindToVM() {
@@ -87,6 +88,15 @@ final class CharacterDetailsViewController: BaseViewController {
         viewModel.characterDimension.bind { [unowned self] dimension in
             characterInfoModule.characterDimension.text = dimension
         }
+        viewModel.isLoading.bind { [unowned self] isFetching in
+            DispatchQueue.main.async {
+                if isFetching {
+                    self.spinner.startAnimating()
+                } else {
+                    self.spinner.stopAnimating()
+                }
+            }
+        }
     }
     
     
@@ -107,6 +117,14 @@ final class CharacterDetailsViewController: BaseViewController {
         label.font = .preferredFont(forTextStyle: .title1, compatibleWith: .init(legibilityWeight: .bold))
         label.text = "Episodes"
         return label
+    }()
+
+    private var spinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView()
+        spinner.style = .large
+        spinner.color = .accentColor
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        return spinner
     }()
 }
 
@@ -163,6 +181,9 @@ extension CharacterDetailsViewController
         portraitConstraints.append(characterInfoModule.bottomAnchor.constraint(equalTo: episodesLabel.topAnchor, constant: GlobalConstants.itemOffsetN))
         portraitConstraints.append(characterInfoModule.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.3))
 
+        portraitConstraints.append(spinner.centerXAnchor.constraint(equalTo: episodesTableView.centerXAnchor))
+        portraitConstraints.append(spinner.centerYAnchor.constraint(equalTo: episodesTableView.centerYAnchor))
+
         landscapeConstraints.append(episodesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor))
         landscapeConstraints.append(episodesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor))
         landscapeConstraints.append(episodesTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor))
@@ -176,6 +197,8 @@ extension CharacterDetailsViewController
         landscapeConstraints.append(characterInfoModule.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor))
         landscapeConstraints.append(characterInfoModule.bottomAnchor.constraint(equalTo: episodesTableView.topAnchor, constant: GlobalConstants.botOffset))
 
+        landscapeConstraints.append(spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor))
+        landscapeConstraints.append(spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor))
 
         let constraints = UIDevice.current.isLandscapeOrFlat ? landscapeConstraints : portraitConstraints
         NSLayoutConstraint.activate(constraints)
