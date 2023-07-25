@@ -80,7 +80,7 @@ class EpisodeDetailsViewModel
         return characterStore[indexPath.row]
     }
     
-    /// Directs user on Imovies.ge to watch chosen episode
+    /// Directs user on safari to watch chosen episode
     public func watchEpisode() -> URL? {
         return imoviesEndpoint.transferToSite.createEndpoint(with: episode.episode)
       
