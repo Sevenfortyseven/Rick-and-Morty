@@ -8,12 +8,13 @@
 import UIKit
 
 
-struct AlertManager {
+public final class AlertManager {
+
     enum AlertType {
         case networkError
     }
 
-    static func initializeAlert(show alert: AlertType, on targetVC: UIViewController) {
+    func alert(show alert: AlertType, on targetVC: UIViewController) {
         switch alert {
         case .networkError:
             let alert = UIAlertController(title: "No Internet Connection", message: "Connect to the internet and try again", preferredStyle: .alert)

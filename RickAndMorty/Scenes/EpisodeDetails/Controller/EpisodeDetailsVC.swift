@@ -60,7 +60,7 @@ class EpisodeDetailsviewController: BaseViewController {
         }
         viewModel.internetConnection.bind { [unowned self] connection in
             if connection == false {
-                AlertManager.initializeAlert(show: .networkError, on: self)
+                alertManger.alert(show: .networkError, on: self)
             }
         }
         viewModel.episodeinfo.bind { [unowned self] info in

@@ -8,8 +8,10 @@
 import UIKit
 
 public class BaseViewController: UIViewController {
+
+    public var alertManger: AlertManager = AlertManager()
+
     public override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .backgroundColor
-    }
-}
+    }}

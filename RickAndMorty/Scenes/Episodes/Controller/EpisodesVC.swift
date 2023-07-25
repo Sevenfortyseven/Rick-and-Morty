@@ -63,7 +63,7 @@ final class EpisodesViewController: BaseViewController {
         }
         viewModel.internetConnection.bind { [unowned self] connection in
             if connection == false {
-                AlertManager.initializeAlert(show: .networkError, on: self)
+                alertManger.alert(show: .networkError, on: self)
             }
         }
         viewModel.isLoading.bind { [unowned self] isFetching in
